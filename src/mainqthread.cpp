@@ -49,7 +49,8 @@ void MainQThread::run() {
 
     Camera camera = Camera::getCamera();
     CameraParameters cp;
-
+    QTime frameRateTime;
+    frameRateTime= QTime::currentTime();
 
     if (!camera.isOpened()) { //check if video device has been initialised
         cout << "cannot open camera";
@@ -147,6 +148,10 @@ void MainQThread::run() {
             emit displayThisImage(img);
             //this->usleep(100);
 
+
+            cout << "frame rate: "<< 1/(frameRateTime.msecsTo(QTime::currentTime())/1000.0)<<" fps"<<endl;
+
+            frameRateTime = QTime::currentTime();
             camera.read(cameraFrame);
         }
     }

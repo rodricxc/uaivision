@@ -30,7 +30,7 @@ private:
     QTime frameRateTime;
     double frameRate;
     void frameRateConfig();
-    void setFrameRate(double rate);
+    void setFrameRateLabel(double rate);
 
     void loadUaiSoccerLogo();
     void loadImage(QString filePath);

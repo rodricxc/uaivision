@@ -14,6 +14,7 @@
 #include "stdlib.h"
 #include "vector"
 #include "math.h"
+#include "QTime"
 
 using namespace cv;
 using namespace std;

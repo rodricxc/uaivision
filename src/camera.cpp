@@ -13,6 +13,7 @@ void Camera::read(Mat &im) {
 }
 
 void Camera::startVideoCapture() {
+    //videoCapture = new VideoCapture("/var/www/filme/ski.mp4");
     videoCapture = new VideoCapture(0);
     //std::cout << "start Camera";
 }

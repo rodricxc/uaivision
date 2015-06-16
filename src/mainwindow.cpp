@@ -32,7 +32,7 @@ void MainWindow::stopmain() {
     main->wait();
     std::cout << "saiu"<< std::endl;
     loadUaiSoccerLogo();
-    setFrameRate(0);
+    setFrameRateLabel(0);
 }
 
 
@@ -46,8 +46,8 @@ void MainWindow::displayImageSLOT(QImage image) {
 
    // cout << "width: " << image.width() << "  height: " << image.height() <<endl;
     loadImage(image);
-    frameRate = 1/(frameRateTime.msecsTo(QTime::currentTime())/1000.0);
-    setFrameRate(frameRate);
+    frameRate = frameRate*0.99 + 0.01*(1/(frameRateTime.msecsTo(QTime::currentTime())/1000.0));
+    setFrameRateLabel(frameRate);
     frameRateTime = QTime::currentTime();
 }
 
@@ -57,7 +57,7 @@ void MainWindow::frameRateConfig() {
     frameRateTime = QTime::currentTime();
 }
 
-void MainWindow::setFrameRate(double rate) {
+void MainWindow::setFrameRateLabel(double rate) {
     this->frameRateLabel->setText("Frame rate: "+ QString::number(rate,'f', 2)+" fps");
 }
 
