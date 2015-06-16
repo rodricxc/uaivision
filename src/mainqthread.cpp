@@ -62,7 +62,7 @@ void MainQThread::run() {
         camera.read(cameraFrame);
 
         while(!this->isInterruptionRequested()){
-
+/*
             MarkerDetector MDetector;
             vector<Marker> Markers;
 
@@ -136,16 +136,16 @@ void MainQThread::run() {
                 line(cameraFrame, center2, center2_, Scalar(255,0,0),2);
                 line(cameraFrame, center3, center3_, Scalar(255,0,0),2);
                 line(cameraFrame, center4, center4_, Scalar(255,0,0),2);
-                //*/
+                //* /
             }
-
+            //*/
             //this->usleep(50000);
             //imshow("in",InImage);
             //cv::waitKey(30);
             //imshow("Camera", cameraFrame);
             QImage img = Utils::mat2QImage(cameraFrame);
             emit displayThisImage(img);
-            this->usleep(100);
+            //this->usleep(100);
 
             camera.read(cameraFrame);
         }

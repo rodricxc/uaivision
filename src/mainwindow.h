@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "mainqthread.h"
 #include "QGraphicsScene"
+#include "QLabel"
+#include "QTime"
 
 namespace Ui {
 class MainWindow;
@@ -22,7 +24,14 @@ public slots:
     void startmain();
     void displayImageSLOT(QImage image);
 
+
 private:
+    QLabel *frameRateLabel;
+    QTime frameRateTime;
+    double frameRate;
+    void frameRateConfig();
+    void setFrameRate(double rate);
+
     void loadUaiSoccerLogo();
     void loadImage(QString filePath);
     void loadImage(QImage img);
