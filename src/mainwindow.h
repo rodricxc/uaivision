@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "mainqthread.h"
+#include "glwindow.h"
 #include "QGraphicsScene"
 #include "QLabel"
 #include "QTime"
@@ -20,10 +21,15 @@ public:
     ~MainWindow();
 
 public slots:
-    void stopmain();
-    void startmain();
+    void stopMain();
+    void startMain();
     void displayImageSLOT(QImage image);
+    void displayImageMinSLOT(QImage image);
 
+
+private slots:
+    void on_actionGLColors_triggered();
+    void addData();
 
 private:
     QLabel *frameRateLabel;
@@ -32,9 +38,14 @@ private:
     void frameRateConfig();
     void setFrameRateLabel(double rate);
 
+    GLWindow *glWindow;
+
     void loadUaiSoccerLogo();
     void loadImage(QString filePath);
     void loadImage(QImage img);
+
+    void loadImageMin(QString filePath);
+    void loadImageMin(QImage img);
     QGraphicsScene *scene;
     Ui::MainWindow *ui;
     MainQThread *main;

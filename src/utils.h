@@ -15,6 +15,7 @@ public:
     Utils();
 
     static QImage mat2QImage(const Mat& mat);
+    static Scalar bgr2hsv(Scalar rgb);
 };
 
 #endif // UTILS_H

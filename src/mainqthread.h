@@ -27,12 +27,20 @@ public:
     MainQThread();
 
 
+    vector<Scalar> getCalibData() const;
+
 signals:
     void displayThisImage(QImage image);
+    void displayThisImageMin(QImage image);
+    void sendCalibData();
 
 private:
-    vector<Scalar> getRandomPixels(Mat &image, int numPoits, Marker A, Marker B, Marker C);
 
+    void getSubTrapezoid(Mat &src, Mat &out, Point a, Point b, Point c, Point d);
+
+
+    vector<Scalar> getRandomPixels(Mat &image, int numPoits, Marker A, Marker B, Marker C);
+    vector<Scalar> calibData;
 
 protected:
     virtual void run();

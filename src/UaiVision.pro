@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT      += core gui
+QT      += opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -23,6 +24,7 @@ LIBS += -lopencv_stitching -lopencv_superres -lopencv_ts -lopencv_video -lopencv
 LIBS += -lrt -lpthread -lm -ldl
 
 LIBS += -laruco
+LIBS += -lglut -lGLU
 
 
 SOURCES += main.cpp\
@@ -31,16 +33,21 @@ SOURCES += main.cpp\
     camera.cpp \
     utils.cpp \
     configdao.cpp \
-    dbscam.cpp
+    dbscam.cpp \
+    glwindow.cpp \
+    myglwidget.cpp
 
 HEADERS  += mainwindow.h \
     mainqthread.h \
     camera.h \
     utils.h \
     configdao.h \
-    dbscam.h
+    dbscam.h \
+    glwindow.h \
+    myglwidget.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    glwindow.ui
 
 DISTFILES += \
     UAISoccer.png \

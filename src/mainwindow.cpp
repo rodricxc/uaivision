@@ -8,26 +8,31 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     frameRateConfig();
 
-
+    glWindow = new GLWindow();
+    //glWindow->setVisible(true);
     main  = new MainQThread();
     scene = new QGraphicsScene(this);
     ui->videoLabel->setMargin(1);
 
-    connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(stopmain()));
-    connect(ui->start, SIGNAL(pressed()), this, SLOT(startmain()));
+    connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(stopMain()));
+    connect(ui->start, SIGNAL(pressed()), this, SLOT(startMain()));
     connect(main, SIGNAL(displayThisImage(QImage)), this, SLOT(displayImageSLOT(QImage)));
+    connect(main, SIGNAL(displayThisImageMin(QImage)), this, SLOT(displayImageMinSLOT(QImage)));
+    connect(main, SIGNAL(sendCalibData()), this, SLOT(addData()));
+
 
     loadUaiSoccerLogo();
     QApplication::setWindowIcon(QIcon("../src/images/icon.png"));
-    //statusBar()->showMessage(tr("Ready", "not ready",300));
-    //main->start();
-}
 
+}
 MainWindow::~MainWindow() {
+    delete main;
+    delete scene;
+    delete glWindow;
     delete ui;
 }
 
-void MainWindow::stopmain() {
+void MainWindow::stopMain() {
     main->requestInterruption();
     main->wait();
     std::cout << "saiu"<< std::endl;
@@ -36,7 +41,7 @@ void MainWindow::stopmain() {
 }
 
 
-void MainWindow::startmain() {
+void MainWindow::startMain() {
     frameRateTime = QTime::currentTime();
     main->start();
     std::cout << "comecou"<< std::endl;
@@ -46,9 +51,13 @@ void MainWindow::displayImageSLOT(QImage image) {
 
    // cout << "width: " << image.width() << "  height: " << image.height() <<endl;
     loadImage(image);
-    frameRate = frameRate*0.99 + 0.01*(1/(frameRateTime.msecsTo(QTime::currentTime())/1000.0));
+    frameRate = frameRate*0.97 + 0.03*(1/(frameRateTime.msecsTo(QTime::currentTime())/1000.0));
     setFrameRateLabel(frameRate);
     frameRateTime = QTime::currentTime();
+}
+
+void MainWindow::displayImageMinSLOT(QImage image) {
+    loadImageMin(image);
 }
 
 void MainWindow::frameRateConfig() {
@@ -63,17 +72,39 @@ void MainWindow::setFrameRateLabel(double rate) {
 
 void MainWindow::loadUaiSoccerLogo() {
     loadImage("../src/images/UAISoccer.png");
+    loadImageMin("../src/images/UAISoccer.png");
 }
 
 void MainWindow::loadImage(QString filePath) {
     QPixmap image;
     if(image.load(filePath)){
-        ui->videoLabel->setPixmap(image);
+        ui->videoLabel->setPixmap(image.scaled(640,480,Qt::KeepAspectRatio));
     } else{
         cout <<"error on loading from file '" << filePath.toStdString() << "'" << endl;
     }
 }
 
 void MainWindow::loadImage(QImage img) {
-    ui->videoLabel->setPixmap(QPixmap::fromImage(img));
+    ui->videoLabel->setPixmap(QPixmap::fromImage(img.scaled(640,480,Qt::KeepAspectRatio)));
+}
+
+void MainWindow::loadImageMin(QString filePath) {
+    QPixmap image;
+    if(image.load(filePath)){
+        ui->videoLabelMin->setPixmap(image.scaled(320,240,Qt::KeepAspectRatio));
+    } else{
+        cout <<"error on loading to Min Image from file '" << filePath.toStdString() << "'" << endl;
+    }
+}
+
+void MainWindow::loadImageMin(QImage img) {
+    ui->videoLabelMin->setPixmap(QPixmap::fromImage(img.scaled(320,240,Qt::KeepAspectRatio)));
+}
+
+void MainWindow::on_actionGLColors_triggered() {
+    glWindow->setVisible(true);
+}
+
+void MainWindow::addData() {
+    this->glWindow->addData(main->getCalibData());
 }

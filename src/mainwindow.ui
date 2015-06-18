@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>920</width>
+    <width>1043</width>
     <height>579</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1043</width>
+    <height>579</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -484,16 +490,55 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
+   <widget class="QLabel" name="videoLabelMin">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>10</y>
+      <width>322</width>
+      <height>242</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>322</width>
+      <height>242</height>
+     </size>
+    </property>
+    <property name="text">
+     <string>video Label</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>260</y>
+      <width>351</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>920</width>
+     <width>1043</width>
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionGLColors"/>
+   </widget>
+   <addaction name="menuTools"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -504,6 +549,11 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionGLColors">
+   <property name="text">
+    <string>GLColors</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
