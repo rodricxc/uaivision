@@ -14,7 +14,7 @@ GLWindow::~GLWindow() {
     delete ui;
 }
 
-void GLWindow::addData(vector<Scalar> v) {
+void GLWindow::addData(vector<CalibPoint> v) {
     ui->widgetToGL->addData(v);
 }
 

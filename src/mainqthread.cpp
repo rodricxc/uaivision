@@ -11,8 +11,8 @@ MainQThread::MainQThread() {
 
 
 
-vector<Scalar> MainQThread::getRandomPixels(Mat &image, int numPoits, Marker A, Marker B, Marker C) {
-    vector<Scalar>  pixels;
+vector<CalibPoint> MainQThread::getRandomPixels(Mat &image, int numPoits, Marker A, Marker B, Marker C) {
+    vector<CalibPoint>  pixels;
 
     Point2f origin;
     Point2f vector_i, vector_j;
@@ -28,12 +28,12 @@ vector<Scalar> MainQThread::getRandomPixels(Mat &image, int numPoits, Marker A, 
 
 
 
-    //Mat imageHSV;
+    Mat imageHSV;
 
-    //cvtColor(image, imageHSV, CV_BGR2HSV);
+    cvtColor(image, imageHSV, CV_BGR2HSV);
 
     for(int i = 0; i < (numPoits ); i++){
-        float alfa = (rand() % 250 + 200)/1000.0;
+        float alfa = (rand() % 600 + 200)/1000.0;
         float beta = (rand() % 700 + 150)/1000.0;
 
         Point newPoint;
@@ -41,7 +41,8 @@ vector<Scalar> MainQThread::getRandomPixels(Mat &image, int numPoits, Marker A, 
         newPoint.y = (int) (origin.y + alfa*vector_i.y + beta*vector_j.y);
 
 
-        Vec3b vec = image.at<cv::Vec3b>(newPoint.y,newPoint.x);
+        Vec3b vecRGB = image.at<cv::Vec3b>(newPoint.y,newPoint.x);
+        Vec3b vecHSV = imageHSV.at<cv::Vec3b>(newPoint.y,newPoint.x);
 
 
         //circle(image, newPoint,1, Scalar(0,0,255),3);
@@ -50,11 +51,11 @@ vector<Scalar> MainQThread::getRandomPixels(Mat &image, int numPoits, Marker A, 
         //cout << "vec = " << vec[2]<< " "<< vec[1]<< " "<< vec[0]<< endl;
 
 
-        if (DBSCAM::distancePixels( Scalar(vec[0], vec[1], vec[2]),  Scalar(0,0,0)) < 300){
+        //if (DBSCAM::distancePixels( Scalar(vec[0], vec[1], vec[2]),  Scalar(0,0,0)) < 330){
 
-            pixels.insert(pixels.end(), Scalar(vec[0], vec[1], vec[2]));
+        pixels.insert(pixels.end(),CalibPoint(Scalar(vecRGB[0], vecRGB[1], vecRGB[2]),Scalar(vecHSV[0], vecHSV[1], vecHSV[2])));
 
-        }
+        //}
 
     }
 
@@ -62,8 +63,7 @@ vector<Scalar> MainQThread::getRandomPixels(Mat &image, int numPoits, Marker A, 
 
 
 }
-vector<Scalar> MainQThread::getCalibData() const
-{
+vector<CalibPoint> MainQThread::getCalibData() const {
     return calibData;
 }
 
@@ -141,7 +141,7 @@ void MainQThread::run() {
             MarkerDetector MDetector;
             vector<Marker> Markers;
 
-            Marker A, B, C;
+            Marker m50, m51, m52, m53;
 
 
             //Ok, let's detect
@@ -170,18 +170,21 @@ void MainQThread::run() {
 
                 for (unsigned int i=0;i<Markers.size();i++) {
                     if (Markers[i].id==50){
-                        A = Markers[i];
+                        m50 = Markers[i];
+                    }
+                    if (Markers[i].id==51){
+                        m51 = Markers[i];
                     }
                     if (Markers[i].id==52){
-                        B = Markers[i];
+                        m52 = Markers[i];
                     }
                     if (Markers[i].id==53){
-                        C = Markers[i];
+                        m53 = Markers[i];
                     }
                 }
 
 
-                vector<Scalar> v = getRandomPixels(cameraFrame,50,A,B,C);
+                vector<CalibPoint> v = getRandomPixels(cameraFrame,50,m50,m52,m53);
                 calibData.clear();
                 calibData.insert(calibData.end(), v.begin(), v.end());
                 emit sendCalibData();
@@ -189,15 +192,60 @@ void MainQThread::run() {
 
 
 
-                Point2f center1 =  Markers[0].getCenter();
-                Point2f center2 =  Markers[1].getCenter();
-                Point2f center3 =  Markers[2].getCenter();
-                Point2f center4 =  Markers[3].getCenter();
+                Point2f center1 =  m50.getCenter();
+                Point2f center2 =  m53.getCenter();
+                Point2f center3 =  m51.getCenter();
+                Point2f center4 =  m52.getCenter();
 
                 Mat subRectangle;
                 getSubTrapezoid(cameraFrame,subRectangle,center1, center2, center3, center4);
+                //getSubTrapezoid(cameraFrame,subRectangle,Markers[0].getCenter(), Markers[1].getCenter(), Markers[2].getCenter(), Markers[3].getCenter());
 
-                QImage imgREC = Utils::mat2QImage(subRectangle);
+                Mat subRectangleGray;
+                Mat subRectangleSobel;
+                blur( subRectangle, subRectangle, Size(3,3));
+                cvtColor(subRectangle, subRectangleGray, CV_BGR2GRAY);
+
+                /// Generate grad_x and grad_y
+
+                int scale = 1;
+                int delta = 0;
+                int ddepth = CV_16S;
+
+                Mat grad_x, grad_y;
+                Mat abs_grad_x, abs_grad_y;
+
+                /// Gradient X
+                Scharr( subRectangleGray, grad_x, ddepth, 1, 0,  scale, delta, BORDER_DEFAULT );
+                //Sobel( subRectangleGray, grad_x, ddepth, 1, 0, 5, scale, delta, BORDER_DEFAULT );
+                convertScaleAbs( grad_x, abs_grad_x );
+
+                /// Gradient Y
+                Scharr( subRectangleGray, grad_y, ddepth, 0, 1,  scale, delta, BORDER_DEFAULT );
+                //Sobel( subRectangleGray, grad_y, ddepth, 0, 1, 5, scale, delta, BORDER_DEFAULT );
+                convertScaleAbs( grad_y, abs_grad_y );
+
+                /// Total Gradient (approximate)
+                addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, subRectangleSobel );
+
+                inRange(subRectangleSobel,cv::Scalar(25, 0, 0),cv::Scalar(255, 255, 255), subRectangleSobel);
+
+                medianBlur(subRectangleSobel, subRectangleSobel, 5);
+
+                Mat erodeElement = getStructuringElement( MORPH_RECT,Size(5,5));
+                //dilate with larger element so make sure object is nicely visible
+                Mat dilateElement = getStructuringElement( MORPH_RECT,Size(5,5));
+
+
+
+//                erode(subRectangleSobel,subRectangleSobel,erodeElement);
+
+                //dilate(subRectangleSobel,subRectangleSobel,dilateElement);
+
+                //erode(subRectangleSobel,subRectangleSobel,erodeElement);
+
+
+                QImage imgREC = Utils::mat2QImage(subRectangleSobel);
                 emit displayThisImageMin(imgREC);
 
 
@@ -206,10 +254,10 @@ void MainQThread::run() {
                 Point2f center3_ =  Markers[2].getCenter();
                 Point2f center4_ =  Markers[3].getCenter();
 
-                line(cameraFrame, center1, center4, Scalar(0,0,255),2);
-                line(cameraFrame, center2, center4, Scalar(0,0,255),2);
-                line(cameraFrame, center3, center2, Scalar(0,0,255),2);
-                line(cameraFrame, center3, center1, Scalar(0,0,255),2);
+                line(cameraFrame, center1, center2, Scalar(0,0,255),2);
+                line(cameraFrame, center2, center3, Scalar(0,0,255),2);
+                line(cameraFrame, center3, center4, Scalar(0,0,255),2);
+                line(cameraFrame, center4, center1, Scalar(0,0,255),2);
                 /*
                 center1.x+=25;center1.y+=40;
                 center2.x+=25;center2.y+=40;

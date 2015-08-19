@@ -6,6 +6,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <vector>
+#include "calibpoint.h"
 
 using namespace cv;
 using namespace std;
@@ -24,7 +25,7 @@ public:
     ~GLWindow();
 
 
-    void addData(vector<Scalar> v);
+    void addData(vector<CalibPoint> v);
 
 
 private:

@@ -18,13 +18,13 @@ MyGLWidget::MyGLWidget(QWidget *parent): QGLWidget(parent) {
 
 }
 
-void MyGLWidget::addData(vector<Scalar> v) {
+void MyGLWidget::addData(vector<CalibPoint> v) {
     //inData.clear();
     inData.insert( inData.end(), v.begin(), v.end());
     cout << "numero de pontos: " << inData.size() << endl;
 }
 
-void MyGLWidget::addData(Scalar p) {
+void MyGLWidget::addData(CalibPoint p) {
     inData.insert( inData.end(), p);
 
 }
@@ -152,20 +152,21 @@ void MyGLWidget::resizeGL(int width, int height) {
 
 }
 
-void MyGLWidget::drawPixel(Scalar p) {
+void MyGLWidget::drawPixel(CalibPoint p) {
 
-    Scalar q = Utils::bgr2hsv(p);
+    Scalar hsv = p.getHsv();
+    Scalar bgr = p.getRgb();
     glPushMatrix();
-    float x = ((float)p.val[2]/255.0);
-    float y = ((float)p.val[1]/255.0);
-    float z = ((float)p.val[0]/255.0);
+    float x = ((float)hsv.val[2]/255.0);
+    float y = ((float)hsv.val[1]/255.0);
+    float z = ((float)hsv.val[0]/255.0);
 
-    float x_ = ((float)q.val[2]/100.0);
-    float y_ = ((float)q.val[1]/100.0);
-    float z_ = ((float)q.val[0]/360.0);
+    float x_color = ((float)bgr.val[2]/255.0);
+    float y_color = ((float)bgr.val[1]/255.0);
+    float z_color = ((float)bgr.val[0]/255.0);
 
 
-    glColor3f(x,y,z);
+    glColor3f(x_color,y_color,z_color);
     //glTranslatef(10.0*x_, 10.0*y_, 10.0*z_);
     glTranslatef(10.0*x, 10.0*y, 10.0*z);
     glutSolidSphere(0.05, 6, 6);
@@ -177,7 +178,7 @@ void MyGLWidget::drawPixel(Scalar p) {
 
 void MyGLWidget::drawInData() {
 
-    vector<Scalar>::iterator it;
+    vector<CalibPoint>::iterator it;
 
     for (it = inData.begin(); it!=inData.end(); it++){
         drawPixel(*it);

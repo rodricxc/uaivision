@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     configdao.cpp \
     dbscam.cpp \
     glwindow.cpp \
-    myglwidget.cpp
+    myglwidget.cpp \
+    calibpoint.cpp
 
 HEADERS  += mainwindow.h \
     mainqthread.h \
@@ -44,7 +45,8 @@ HEADERS  += mainwindow.h \
     configdao.h \
     dbscam.h \
     glwindow.h \
-    myglwidget.h
+    myglwidget.h \
+    calibpoint.h
 
 FORMS    += mainwindow.ui \
     glwindow.ui

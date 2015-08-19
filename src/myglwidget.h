@@ -15,6 +15,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QPoint>
+#include "calibpoint.h"
 
 using namespace cv;
 using namespace std;
@@ -27,8 +28,8 @@ public:
 
 
 
-    void addData(vector<Scalar> v);
-    void addData(Scalar p);
+    void addData(vector<CalibPoint> v);
+    void addData(CalibPoint p);
 
     double getRotateX() const;
     void setRotateX(double value);
@@ -47,7 +48,7 @@ protected:
     void paintGL();
     void resizeGL(int width, int height);
 
-    void drawPixel(Scalar p);
+    void drawPixel(CalibPoint p);
     void drawInData();
 
     void mousePressEvent(QMouseEvent *event);
@@ -64,7 +65,7 @@ private:
 
     QTimer timer;
 
-    vector<Scalar> inData;
+    vector<CalibPoint> inData;
 
     QPoint lastPos;
 

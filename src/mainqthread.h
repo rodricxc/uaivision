@@ -15,6 +15,7 @@
 #include "vector"
 #include "math.h"
 #include "QTime"
+#include "calibpoint.h"
 
 using namespace cv;
 using namespace std;
@@ -27,7 +28,7 @@ public:
     MainQThread();
 
 
-    vector<Scalar> getCalibData() const;
+    vector<CalibPoint> getCalibData() const;
 
 signals:
     void displayThisImage(QImage image);
@@ -39,8 +40,8 @@ private:
     void getSubTrapezoid(Mat &src, Mat &out, Point a, Point b, Point c, Point d);
 
 
-    vector<Scalar> getRandomPixels(Mat &image, int numPoits, Marker A, Marker B, Marker C);
-    vector<Scalar> calibData;
+    vector<CalibPoint> getRandomPixels(Mat &image, int numPoits, Marker A, Marker B, Marker C);
+    vector<CalibPoint> calibData;
 
 protected:
     virtual void run();
