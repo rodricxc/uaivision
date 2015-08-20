@@ -13,6 +13,15 @@ using namespace std;
 class CalibPoint
 {
 public:
+
+    enum PointClassification {
+        CORE,
+        OUTLIER,
+        BORDER,
+        UNDEFINED
+    };
+
+
     CalibPoint();
     CalibPoint(Scalar rgb, Scalar hsv);
 
@@ -22,9 +31,19 @@ public:
     Scalar getHsv() const;
     void setHsv(const Scalar &value);
 
+    double euclidianDistanceRGBFrom(CalibPoint p);
+    double euclidianDistanceHSVFrom(CalibPoint p);
+
+    PointClassification getClassification() const;
+
+    //overloading the equal (==) comparator
+    bool operator==(const CalibPoint &other);
+    bool operator!=(const CalibPoint &other);
+
 private:
     Scalar rgb;
     Scalar hsv;
+    PointClassification classification;
 
 };
 
