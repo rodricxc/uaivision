@@ -63,6 +63,61 @@ vector<CalibPoint> MainQThread::getRandomPixels(Mat &image, int numPoits, Marker
 
 
 }
+
+vector<CalibPoint> MainQThread::getRandomPixels(Mat &image, Mat &grayImage, int numPoits) {
+
+  vector<CalibPoint>  pixels;
+
+
+  Point2f vector_i, vector_j;
+
+
+  vector_i.x = image.cols;
+  vector_i.y = 0;
+
+  vector_j.x = 0;
+  vector_j.y = image.rows;
+
+
+
+  Mat imageHSV;
+
+  cvtColor(image, imageHSV, CV_BGR2HSV);
+
+  for(int i = 0; i < (numPoits ); i++){
+      float alfa = (rand() % 600 + 200)/1000.0;
+      float beta = (rand() % 700 + 150)/1000.0;
+
+      Point newPoint;
+      newPoint.x = (int) (0 + alfa*vector_i.x + beta*vector_j.x);
+      newPoint.y = (int) (0 + alfa*vector_i.y + beta*vector_j.y);
+
+
+      Vec3b vecRGB = image.at<cv::Vec3b>(newPoint.y,newPoint.x);
+      Vec3b vecHSV = imageHSV.at<cv::Vec3b>(newPoint.y,newPoint.x);
+
+
+      circle(grayImage, newPoint,1, Scalar(0,0,255),3);
+      //Scalar pix = image.at<Vec3b>(newPoint);
+
+      //cout << "vec = " << vec[2]<< " "<< vec[1]<< " "<< vec[0]<< endl;
+
+
+
+      if ( vecHSV[2]> 127 && vecHSV[1]>50) {
+
+          pixels.insert(pixels.end(),CalibPoint(Scalar(vecRGB[0], vecRGB[1], vecRGB[2]),Scalar(vecHSV[0], vecHSV[1], vecHSV[2])));
+}
+     // } else {
+     //     i--;
+     // }
+
+  }
+
+  return pixels;
+
+}
+
 vector<CalibPoint> MainQThread::getCalibData() const {
     return calibData;
 }
@@ -154,11 +209,6 @@ void MainQThread::run() {
                 if (cp.isValid()){
                     // aruco::CvDrawingUtils::draw3dCube(cameraFrame,Markers[i],cp);
                 }
-
-
-
-
-
             }
 
 
@@ -183,11 +233,11 @@ void MainQThread::run() {
                     }
                 }
 
-
+                /*
                 vector<CalibPoint> v = getRandomPixels(cameraFrame,50,m50,m52,m53);
                 calibData.clear();
                 calibData.insert(calibData.end(), v.begin(), v.end());
-                emit sendCalibData();
+                emit sendCalibData();*/
 
 
 
@@ -228,13 +278,13 @@ void MainQThread::run() {
                 /// Total Gradient (approximate)
                 addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, subRectangleSobel );
 
-                inRange(subRectangleSobel,cv::Scalar(25, 0, 0),cv::Scalar(255, 255, 255), subRectangleSobel);
+                inRange(subRectangleSobel,cv::Scalar(45, 0, 0),cv::Scalar(255, 255, 255), subRectangleSobel);
 
                 medianBlur(subRectangleSobel, subRectangleSobel, 5);
 
-                Mat erodeElement = getStructuringElement( MORPH_RECT,Size(5,5));
+                Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));
                 //dilate with larger element so make sure object is nicely visible
-                Mat dilateElement = getStructuringElement( MORPH_RECT,Size(5,5));
+                Mat dilateElement = getStructuringElement( MORPH_RECT,Size(3,3));
 
 
 
@@ -243,7 +293,10 @@ void MainQThread::run() {
                 //dilate(subRectangleSobel,subRectangleSobel,dilateElement);
 
                 //erode(subRectangleSobel,subRectangleSobel,erodeElement);
-
+                vector<CalibPoint> v = getRandomPixels(cameraFrame,subRectangleSobel,500);
+                calibData.clear();
+                calibData.insert(calibData.end(), v.begin(), v.end());
+                emit sendCalibData();
 
                 QImage imgREC = Utils::mat2QImage(subRectangleSobel);
                 emit displayThisImageMin(imgREC);

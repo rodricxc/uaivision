@@ -15,13 +15,19 @@ MyGLWidget::MyGLWidget(QWidget *parent): QGLWidget(parent) {
     //  addData(Scalar(100,0,0));
     //  addData(Scalar(50,0,0));
     //  addData(Scalar(150,0,0));
+    this->dbscan = new DBSCAN();
 
 }
 
 void MyGLWidget::addData(vector<CalibPoint> v) {
-    //inData.clear();
-    inData.insert( inData.end(), v.begin(), v.end());
-    cout << "numero de pontos: " << inData.size() << endl;
+  //inData.clear();
+    this->dbscan->insertPointsVector(v);
+
+    set<CalibPoint> p = this->dbscan->getPoints();
+    inData.clear();
+    inData.insert( inData.end(), p.begin(), p.end());
+
+    cout << "numero de pontos inseridos: " << v.size() << endl;
 }
 
 void MyGLWidget::addData(CalibPoint p) {
@@ -30,7 +36,12 @@ void MyGLWidget::addData(CalibPoint p) {
 }
 
 void MyGLWidget::clearData() {
-    this->inData.clear();
+    this->dbscan->clear();
+  this->inData.clear();
+}
+
+void MyGLWidget::clusterize() {
+    this->dbscan->analise();
 }
 
 void MyGLWidget::initializeGL() {
@@ -181,7 +192,9 @@ void MyGLWidget::drawInData() {
     vector<CalibPoint>::iterator it;
 
     for (it = inData.begin(); it!=inData.end(); it++){
-        drawPixel(*it);
+        if ((it)->isCore()) {
+            drawPixel(*it);
+        }
     }
 
 }

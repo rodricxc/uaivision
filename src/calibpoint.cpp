@@ -43,23 +43,67 @@ double CalibPoint::euclidianDistanceHSVFrom(CalibPoint p) {
 }
 
 CalibPoint::PointClassification CalibPoint::getClassification() const {
-    return classification;
+  return classification;
+}
+
+void CalibPoint::toCore() {
+  this->classification = CORE;
+}
+
+void CalibPoint::toOutlier() {
+  this->classification = OUTLIER;
+}
+
+void CalibPoint::toUndefined() {
+  this->classification = UNDEFINED;
+}
+
+void CalibPoint::toBorder() {
+  this->classification = BORDER;
+}
+
+bool CalibPoint::isCore() {
+  return this->classification == CORE;
+}
+
+bool CalibPoint::isOutlier() {
+  return this->classification == OUTLIER;
+}
+
+bool CalibPoint::isUndefined() {
+  return this->classification == UNDEFINED;
+}
+
+bool CalibPoint::isBorder() {
+  return this->classification == BORDER;
 }
 
 bool CalibPoint::operator==(const CalibPoint &other) {
     Scalar otherHSV = other.getHsv();
     Scalar otherRGB = other.getRgb();
-    return (this->hsv[0] == otherHSV[0] &&
-            this->hsv[1] == otherHSV[1] &&
-            this->hsv[2] == otherHSV[2] &&
-            this->rgb[0] == otherRGB[0] &&
+    return (this->rgb[0] == otherRGB[0] &&
             this->rgb[1] == otherRGB[1] &&
             this->rgb[2] == otherRGB[2]);
 }
 
 bool CalibPoint::operator!=(const CalibPoint &other) {
-    return !(*this == other);
+  return !(*this == other);
 }
+
+bool CalibPoint::operator<(const CalibPoint &other) const {
+  Scalar otherHSV = other.getHsv();
+  Scalar meHSV = this->getHsv();
+  if (meHSV[0] == otherHSV[0]) {
+      if (meHSV[1] == otherHSV[1]) {
+          return meHSV[2] < otherHSV[2];
+        } else {
+          return meHSV[1] < otherHSV[1];
+        }
+   } else {
+      return meHSV[0] < otherHSV[0];
+   }
+}
+
 
 
 

@@ -36,9 +36,20 @@ public:
 
     PointClassification getClassification() const;
 
+    void toCore();
+    void toOutlier();
+    void toUndefined();
+    void toBorder();
+
+    bool isCore();
+    bool isOutlier();
+    bool isUndefined();
+    bool isBorder();
+
     //overloading the equal (==) comparator
     bool operator==(const CalibPoint &other);
     bool operator!=(const CalibPoint &other);
+    bool operator<(const CalibPoint &other) const;
 
 private:
     Scalar rgb;

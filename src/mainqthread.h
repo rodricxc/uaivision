@@ -41,6 +41,7 @@ private:
 
 
     vector<CalibPoint> getRandomPixels(Mat &image, int numPoits, Marker A, Marker B, Marker C);
+    vector<CalibPoint> getRandomPixels(Mat &image, Mat &grayImage, int numPoits);
     vector<CalibPoint> calibData;
 
 protected:

@@ -16,6 +16,7 @@
 #include <QKeyEvent>
 #include <QPoint>
 #include "calibpoint.h"
+#include "dbscam.h"
 
 using namespace cv;
 using namespace std;
@@ -42,6 +43,7 @@ public:
 
 public slots:
     void clearData();
+    void clusterize();
 
 protected:
     void initializeGL();
@@ -66,6 +68,8 @@ private:
     QTimer timer;
 
     vector<CalibPoint> inData;
+
+    DBSCAN *dbscan;
 
     QPoint lastPos;
 

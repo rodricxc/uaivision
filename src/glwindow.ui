@@ -46,6 +46,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>Clusterize</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pushButton_2">
        <property name="text">
         <string>Clear</string>
@@ -71,6 +78,7 @@
    <container>1</container>
    <slots>
     <slot>clearData()</slot>
+    <slot>clusterize()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -89,6 +97,22 @@
     <hint type="destinationlabel">
      <x>525</x>
      <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>widgetToGL</receiver>
+   <slot>clusterize()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>468</x>
+     <y>250</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>402</x>
+     <y>185</y>
     </hint>
    </hints>
   </connection>
