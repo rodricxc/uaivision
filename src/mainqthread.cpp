@@ -119,7 +119,14 @@ vector<CalibPoint> MainQThread::getRandomPixels(Mat &image, Mat &grayImage, int 
 }
 
 vector<CalibPoint> MainQThread::getCalibData() const {
-    return calibData;
+  return calibData;
+}
+
+void MainQThread::getThresholdSpace(int minH, int minS, int minV, int maxH, int maxS, int maxV) {
+  this->minHSV = Scalar(minH,minS,minV);
+  this->maxHSV = Scalar(maxH,maxS,maxV);
+
+  cout << "set min and max " << minH << endl;
 }
 
 void MainQThread::getSubTrapezoid(Mat &src, Mat &out, Point a, Point b, Point c, Point d) {
@@ -182,21 +189,36 @@ void MainQThread::run() {
         cout << "cannot open camera";
         return;
     }
+    Mat cameraFrame;
+    Mat imageHSV;
+    MarkerDetector MDetector;
+    vector<Marker> Markers;
 
+    Marker m50, m51, m52, m53;
+
+    Point2f center1;
+    Point2f center2;
+    Point2f center3;
+    Point2f center4;
+    Mat subRectangle;
+    Mat subRectangleGray;
+    Mat subRectangleSobel;
+    Mat grad_x, grad_y;
+    Mat abs_grad_x, abs_grad_y;
+
+     Mat erodeElement;
+     Mat dilateElement;
     if (!this->isInterruptionRequested()){
 
-        Mat cameraFrame;
+
         camera.read(cameraFrame);
 
         while(!this->isInterruptionRequested()){
-            Mat imageHSV;
+
 
             cvtColor(cameraFrame, imageHSV, CV_BGR2HSV);
             //*
-            MarkerDetector MDetector;
-            vector<Marker> Markers;
 
-            Marker m50, m51, m52, m53;
 
 
             //Ok, let's detect
@@ -215,8 +237,8 @@ void MainQThread::run() {
 
 
 
-
-            if (Markers.size()>=4){
+            if (false) {
+            //if (Markers.size()>=4){
 
                 for (unsigned int i=0;i<Markers.size();i++) {
                     if (Markers[i].id==50){
@@ -242,17 +264,16 @@ void MainQThread::run() {
 
 
 
-                Point2f center1 =  m50.getCenter();
-                Point2f center2 =  m53.getCenter();
-                Point2f center3 =  m51.getCenter();
-                Point2f center4 =  m52.getCenter();
+                center1 =  m50.getCenter();
+                center2 =  m53.getCenter();
+                center3 =  m51.getCenter();
+                center4 =  m52.getCenter();
 
-                Mat subRectangle;
+
                 getSubTrapezoid(cameraFrame,subRectangle,center1, center2, center3, center4);
                 //getSubTrapezoid(cameraFrame,subRectangle,Markers[0].getCenter(), Markers[1].getCenter(), Markers[2].getCenter(), Markers[3].getCenter());
 
-                Mat subRectangleGray;
-                Mat subRectangleSobel;
+
                 blur( subRectangle, subRectangle, Size(3,3));
                 cvtColor(subRectangle, subRectangleGray, CV_BGR2GRAY);
 
@@ -262,8 +283,7 @@ void MainQThread::run() {
                 int delta = 0;
                 int ddepth = CV_16S;
 
-                Mat grad_x, grad_y;
-                Mat abs_grad_x, abs_grad_y;
+
 
                 /// Gradient X
                 Scharr( subRectangleGray, grad_x, ddepth, 1, 0,  scale, delta, BORDER_DEFAULT );
@@ -282,9 +302,9 @@ void MainQThread::run() {
 
                 medianBlur(subRectangleSobel, subRectangleSobel, 5);
 
-                Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));
+                erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));
                 //dilate with larger element so make sure object is nicely visible
-                Mat dilateElement = getStructuringElement( MORPH_RECT,Size(3,3));
+                dilateElement = getStructuringElement( MORPH_RECT,Size(3,3));
 
 
 
@@ -293,10 +313,10 @@ void MainQThread::run() {
                 //dilate(subRectangleSobel,subRectangleSobel,dilateElement);
 
                 //erode(subRectangleSobel,subRectangleSobel,erodeElement);
-                vector<CalibPoint> v = getRandomPixels(cameraFrame,subRectangleSobel,500);
-                calibData.clear();
-                calibData.insert(calibData.end(), v.begin(), v.end());
-                emit sendCalibData();
+                //vector<CalibPoint> v = getRandomPixels(cameraFrame,subRectangleSobel,500);
+               // calibData.clear();
+               // calibData.insert(calibData.end(), v.begin(), v.end());
+                //emit sendCalibData();
 
                 QImage imgREC = Utils::mat2QImage(subRectangleSobel);
                 emit displayThisImageMin(imgREC);
@@ -333,11 +353,27 @@ void MainQThread::run() {
             //imshow("in",InImage);
             //cv::waitKey(30);
             //imshow("Camera", cameraFrame);
-            QImage img = Utils::mat2QImage(cameraFrame);
-            emit displayThisImage(img);
+            Mat thresh;
+            inRange(imageHSV,this->minHSV,this->maxHSV,thresh);
 
-            //QImage imgHSV = Utils::mat2QImage(imageHSV);
-            //emit displayThisImageMin(imgHSV);
+                    Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));
+                //dilate with larger element so make sure object is nicely visible
+                    Mat dilateElement = getStructuringElement( MORPH_RECT,Size(8,8));
+
+                    erode(thresh,thresh,erodeElement);
+                    erode(thresh,thresh,erodeElement);
+                    dilate(thresh,thresh,dilateElement);
+                    dilate(thresh,thresh,dilateElement);
+
+            QImage imgs = Utils::mat2QImage(thresh);
+            emit displayThrashold(imgs);
+
+
+            QImage imgss = Utils::mat2QImage(cameraFrame);
+            emit displayThisImageMin(imgss);
+
+            QImage img = Utils::mat2QImage(imageHSV);
+            emit displayThisImage(img);
             //this->usleep(100);
 
 
@@ -348,4 +384,3 @@ void MainQThread::run() {
         }
     }
 }
-

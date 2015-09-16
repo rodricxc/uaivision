@@ -537,6 +537,8 @@
      <string>Tools</string>
     </property>
     <addaction name="actionGLColors"/>
+    <addaction name="actionThresholded_Image"/>
+    <addaction name="actionThrashold_Colors"/>
    </widget>
    <addaction name="menuTools"/>
   </widget>
@@ -552,6 +554,16 @@
   <action name="actionGLColors">
    <property name="text">
     <string>GLColors</string>
+   </property>
+  </action>
+  <action name="actionThresholded_Image">
+   <property name="text">
+    <string>Thresholded Image</string>
+   </property>
+  </action>
+  <action name="actionThrashold_Colors">
+   <property name="text">
+    <string>Thrashold Colors</string>
    </property>
   </action>
  </widget>

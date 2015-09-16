@@ -31,9 +31,14 @@ public:
     vector<CalibPoint> getCalibData() const;
 
 signals:
+    void displayThrashold(QImage image);
     void displayThisImage(QImage image);
     void displayThisImageMin(QImage image);
     void sendCalibData();
+
+public slots:
+    void getThresholdSpace(int minH,int minS,int minV,int maxH,int maxS,int maxV);
+
 
 private:
 
@@ -43,6 +48,9 @@ private:
     vector<CalibPoint> getRandomPixels(Mat &image, int numPoits, Marker A, Marker B, Marker C);
     vector<CalibPoint> getRandomPixels(Mat &image, Mat &grayImage, int numPoits);
     vector<CalibPoint> calibData;
+
+    Scalar minHSV;
+    Scalar maxHSV;
 
 protected:
     virtual void run();

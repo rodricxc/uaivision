@@ -7,6 +7,8 @@
 #include "QGraphicsScene"
 #include "QLabel"
 #include "QTime"
+#include "showimage.h"
+#include "selectthrashold.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,12 +25,16 @@ public:
 public slots:
     void stopMain();
     void startMain();
+
     void displayImageSLOT(QImage image);
     void displayImageMinSLOT(QImage image);
+    void getThresholdSpace(int minH,int minS,int minV,int maxH,int maxS,int maxV);
 
 
 private slots:
     void on_actionGLColors_triggered();
+    void on_actionThresholded_Image_triggered();
+    void on_actionThrashold_Colors_triggered();
     void addData();
 
 private:
@@ -39,6 +45,13 @@ private:
     void setFrameRateLabel(double rate);
 
     GLWindow *glWindow;
+    ShowImage *thrasholded;
+    SelectThrashold *selectThrashold;
+
+    Scalar minHSV;
+    Scalar maxHSV;
+
+
 
     void loadUaiSoccerLogo();
     void loadImage(QString filePath);

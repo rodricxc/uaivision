@@ -8,7 +8,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     frameRateConfig();
 
-    glWindow = new GLWindow();
+    this->glWindow = new GLWindow();
+    this->thrasholded = new ShowImage();
+    this->selectThrashold = new SelectThrashold();
     //glWindow->setVisible(true);
     main  = new MainQThread();
     scene = new QGraphicsScene(this);
@@ -19,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(main, SIGNAL(displayThisImage(QImage)), this, SLOT(displayImageSLOT(QImage)));
     connect(main, SIGNAL(displayThisImageMin(QImage)), this, SLOT(displayImageMinSLOT(QImage)));
     connect(main, SIGNAL(sendCalibData()), this, SLOT(addData()));
+
+    connect(main, SIGNAL(displayThrashold(QImage)), thrasholded, SLOT(displayImageSLOT(QImage)));
+    connect(selectThrashold, SIGNAL(changeIntervalThrashold(int,int,int,int,int,int)), main, SLOT(getThresholdSpace(int,int,int,int,int,int)));
 
 
     loadUaiSoccerLogo();
@@ -57,7 +62,14 @@ void MainWindow::displayImageSLOT(QImage image) {
 }
 
 void MainWindow::displayImageMinSLOT(QImage image) {
-    loadImageMin(image);
+  loadImageMin(image);
+}
+
+void MainWindow::getThresholdSpace(int minH, int minS, int minV, int maxH, int maxS, int maxV) {
+  this->minHSV = Scalar(minH,minS,minV);
+  this->maxHSV = Scalar(maxH,maxS,maxV);
+
+  cout << "set min and max " << minH << endl;
 }
 
 void MainWindow::frameRateConfig() {
@@ -102,7 +114,15 @@ void MainWindow::loadImageMin(QImage img) {
 }
 
 void MainWindow::on_actionGLColors_triggered() {
-    glWindow->setVisible(true);
+    this->glWindow->setVisible(true);
+}
+
+void MainWindow::on_actionThresholded_Image_triggered() {
+  this->thrasholded->setVisible(true);
+}
+
+void MainWindow::on_actionThrashold_Colors_triggered() {
+  this->selectThrashold->setVisible(true);
 }
 
 void MainWindow::addData() {

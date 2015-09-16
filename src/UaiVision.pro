@@ -37,7 +37,9 @@ SOURCES += main.cpp\
     dbscam.cpp \
     glwindow.cpp \
     myglwidget.cpp \
-    calibpoint.cpp
+    calibpoint.cpp \
+    showimage.cpp \
+    selectthrashold.cpp
 
 HEADERS  += mainwindow.h \
     mainqthread.h \
@@ -47,10 +49,14 @@ HEADERS  += mainwindow.h \
     dbscam.h \
     glwindow.h \
     myglwidget.h \
-    calibpoint.h
+    calibpoint.h \
+    showimage.h \
+    selectthrashold.h
 
 FORMS    += mainwindow.ui \
-    glwindow.ui
+    glwindow.ui \
+    showimage.ui \
+    selectthrashold.ui
 
 DISTFILES += \
     UAISoccer.png \
