@@ -16,6 +16,7 @@
 #include "math.h"
 #include "QTime"
 #include "calibpoint.h"
+#include "configdao.h"
 
 using namespace cv;
 using namespace std;
@@ -29,7 +30,8 @@ public:
 
 
     vector<CalibPoint> getCalibData() const;
-
+    void trackFilteredObject(int &x, int &y, Mat threshold, Mat &cameraFeed);
+    void drawObject(int x, int y,Mat &frame);
 signals:
     void displayThrashold(QImage image);
     void displayThisImage(QImage image);

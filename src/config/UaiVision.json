@@ -1,43 +1,31 @@
-{ 
-	"colors": [
-		{	
-			"color": "orange",
-            "r": 255,
-            "g": 153,
-			"b": 0,
-			"hMin": 0,
-			"hMax": 255,
-			"sMin": 0,
-			"sMax": 255,
-			"vMin": 0,
-			"vMax": 255,
-        },
-        {
-            "color": "blue",
-            "r": 0,
-            "g": 0,
-            "b": 255,
-            "hMin": 0,
-            "hMax": 255,
-            "sMin": 0,
-            "sMax": 255,
-            "vMin": 0,
-            "vMax": 255,
-        },
-        {
-            "color": "red",
-            "r": 255,
-            "g": 0,
-            "b": 0,
-            "hMin": 0,
-            "hMax": 255,
-            "sMin": 0,
-            "sMax": 255,
-            "vMin": 0,
-            "vMax": 255,
-        }
-    ],
-    "lastUpdate": {
+{ "lastUpdate": {
         "date": "2015-06-04 17:00:00"
-    }
+    },
+    "name": "UaiSoccer Vision System",
+    "colorSpaces": [
+        {
+            "spaceName": "red",
+            "r":255,
+            "g":0,
+            "b":0,
+            "minH": 0,
+            "minS": 0,
+            "minV": 0,
+            "maxH": 255,
+            "maxS": 255,
+            "maxV": 255
+        }, {
+            "spaceName": "blue",
+            "r":0,
+            "g":0,
+            "b":255,
+            "minH": 0,
+            "minS": 0,
+            "minV": 0,
+            "maxH": 255,
+            "maxS": 255,
+            "maxV": 255
+        }
+
+    ]
 }

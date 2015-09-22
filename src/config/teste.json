@@ -1,0 +1,32 @@
+{
+    "colorSpaces": [
+        {
+            "b": 0,
+            "g": 0,
+            "maxH": 255,
+            "maxS": 255,
+            "maxV": 255,
+            "minH": 0,
+            "minS": 0,
+            "minV": 0,
+            "r": 255,
+            "spaceName": "red"
+        },
+        {
+            "b": 255,
+            "g": 0,
+            "maxH": 255,
+            "maxS": 255,
+            "maxV": 255,
+            "minH": 0,
+            "minS": 0,
+            "minV": 0,
+            "r": 0,
+            "spaceName": "blue"
+        }
+    ],
+    "lastUpdate": {
+        "date": "2015-06-04 17:00:00"
+    },
+    "name": "UaiSoccer Vision System"
+}

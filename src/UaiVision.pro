@@ -39,7 +39,8 @@ SOURCES += main.cpp\
     myglwidget.cpp \
     calibpoint.cpp \
     showimage.cpp \
-    selectthrashold.cpp
+    selectthrashold.cpp \
+    colorspace.cpp
 
 HEADERS  += mainwindow.h \
     mainqthread.h \
@@ -51,7 +52,8 @@ HEADERS  += mainwindow.h \
     myglwidget.h \
     calibpoint.h \
     showimage.h \
-    selectthrashold.h
+    selectthrashold.h \
+    colorspace.h
 
 FORMS    += mainwindow.ui \
     glwindow.ui \
