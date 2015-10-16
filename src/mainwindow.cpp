@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(main, SIGNAL(sendCalibData()), this, SLOT(addData()));
 
     connect(main, SIGNAL(displayThrashold(QImage)), thrasholded, SLOT(displayImageSLOT(QImage)));
-    connect(selectThrashold, SIGNAL(changeIntervalThrashold(int,int,int,int,int,int)), main, SLOT(getThresholdSpace(int,int,int,int,int,int)));
+    connect(selectThrashold, SIGNAL(changedIntervalThrashold()), main, SLOT(getThresholdSpace()));
 
 
     loadUaiSoccerLogo();

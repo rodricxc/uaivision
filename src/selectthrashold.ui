@@ -6,14 +6,107 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>695</width>
-    <height>476</height>
+    <width>682</width>
+    <height>301</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QHBoxLayout" name="horizontalLayout_5">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QListWidget" name="listWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <item>
+        <property name="text">
+         <string>Azul</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>amarelo</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Name</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="colorName"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Color:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="colorDisplay">
+         <property name="text">
+          <string>Color</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="text">
+          <string>Save</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Add New</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
@@ -23,7 +116,13 @@
          <property name="minimumSize">
           <size>
            <width>45</width>
-           <height>0</height>
+           <height>37</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>45</width>
+           <height>37</height>
           </size>
          </property>
          <property name="text">
@@ -33,6 +132,18 @@
        </item>
        <item>
         <widget class="QSlider" name="s_min_h">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -46,7 +157,13 @@
          <property name="minimumSize">
           <size>
            <width>30</width>
-           <height>0</height>
+           <height>37</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>30</width>
+           <height>37</height>
           </size>
          </property>
          <property name="text">
@@ -63,7 +180,13 @@
          <property name="minimumSize">
           <size>
            <width>45</width>
-           <height>0</height>
+           <height>37</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>45</width>
+           <height>37</height>
           </size>
          </property>
          <property name="text">
@@ -73,6 +196,18 @@
        </item>
        <item>
         <widget class="QSlider" name="s_max_h">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -89,11 +224,17 @@
          <property name="minimumSize">
           <size>
            <width>30</width>
-           <height>0</height>
+           <height>37</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>30</width>
+           <height>37</height>
           </size>
          </property>
          <property name="text">
-          <string>0</string>
+          <string>255</string>
          </property>
         </widget>
        </item>
@@ -113,7 +254,13 @@
          <property name="minimumSize">
           <size>
            <width>45</width>
-           <height>0</height>
+           <height>36</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>45</width>
+           <height>36</height>
           </size>
          </property>
          <property name="text">
@@ -123,6 +270,18 @@
        </item>
        <item>
         <widget class="QSlider" name="s_min_s">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -136,7 +295,13 @@
          <property name="minimumSize">
           <size>
            <width>30</width>
-           <height>0</height>
+           <height>36</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>30</width>
+           <height>36</height>
           </size>
          </property>
          <property name="text">
@@ -153,7 +318,13 @@
          <property name="minimumSize">
           <size>
            <width>45</width>
-           <height>0</height>
+           <height>37</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>45</width>
+           <height>37</height>
           </size>
          </property>
          <property name="text">
@@ -163,6 +334,18 @@
        </item>
        <item>
         <widget class="QSlider" name="s_max_s">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -179,11 +362,17 @@
          <property name="minimumSize">
           <size>
            <width>30</width>
-           <height>0</height>
+           <height>37</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>30</width>
+           <height>37</height>
           </size>
          </property>
          <property name="text">
-          <string>0</string>
+          <string>255</string>
          </property>
         </widget>
        </item>
@@ -203,7 +392,13 @@
          <property name="minimumSize">
           <size>
            <width>45</width>
-           <height>0</height>
+           <height>37</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>45</width>
+           <height>37</height>
           </size>
          </property>
          <property name="text">
@@ -213,6 +408,18 @@
        </item>
        <item>
         <widget class="QSlider" name="s_min_v">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -226,7 +433,13 @@
          <property name="minimumSize">
           <size>
            <width>30</width>
-           <height>0</height>
+           <height>37</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>30</width>
+           <height>37</height>
           </size>
          </property>
          <property name="text">
@@ -243,7 +456,13 @@
          <property name="minimumSize">
           <size>
            <width>45</width>
-           <height>0</height>
+           <height>37</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>45</width>
+           <height>37</height>
           </size>
          </property>
          <property name="text">
@@ -253,6 +472,18 @@
        </item>
        <item>
         <widget class="QSlider" name="s_max_v">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>29</height>
+          </size>
+         </property>
          <property name="minimum">
           <number>0</number>
          </property>
@@ -272,11 +503,17 @@
          <property name="minimumSize">
           <size>
            <width>30</width>
-           <height>0</height>
+           <height>37</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>30</width>
+           <height>37</height>
           </size>
          </property>
          <property name="text">
-          <string>0</string>
+          <string>255</string>
          </property>
         </widget>
        </item>
@@ -284,26 +521,21 @@
      </item>
     </layout>
    </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>213</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
+  <zorder>layoutWidget</zorder>
+  <zorder>listWidget</zorder>
+  <zorder>horizontalLayoutWidget</zorder>
+  <zorder></zorder>
+  <zorder>label_3</zorder>
+  <zorder>lineEdit_2</zorder>
+  <zorder>pushButton_2</zorder>
+  <zorder>horizontalSpacer</zorder>
  </widget>
  <resources/>
  <connections>
   <connection>
    <sender>s_min_h</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>label_7</receiver>
    <slot>setNum(int)</slot>
    <hints>
@@ -319,7 +551,7 @@
   </connection>
   <connection>
    <sender>s_max_h</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>label_9</receiver>
    <slot>setNum(int)</slot>
    <hints>
@@ -335,7 +567,7 @@
   </connection>
   <connection>
    <sender>s_min_s</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>label_13</receiver>
    <slot>setNum(int)</slot>
    <hints>
@@ -351,7 +583,7 @@
   </connection>
   <connection>
    <sender>s_max_s</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>label_11</receiver>
    <slot>setNum(int)</slot>
    <hints>
@@ -367,7 +599,7 @@
   </connection>
   <connection>
    <sender>s_min_v</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>label_17</receiver>
    <slot>setNum(int)</slot>
    <hints>
@@ -383,7 +615,7 @@
   </connection>
   <connection>
    <sender>s_max_v</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>label_15</receiver>
    <slot>setNum(int)</slot>
    <hints>

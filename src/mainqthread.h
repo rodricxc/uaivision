@@ -39,7 +39,7 @@ signals:
     void sendCalibData();
 
 public slots:
-    void getThresholdSpace(int minH,int minS,int minV,int maxH,int maxS,int maxV);
+    void getThresholdSpace();
 
 
 private:

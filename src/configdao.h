@@ -24,8 +24,13 @@ public:
     bool writeJSON();
     static ConfigDAO *Instance();
 
+    bool hasColor(QString colorName);
+    ColorSpace insertColorSpace(ColorSpace cs);
+    vector<ColorSpace> getColorSpaces() const;
 
-
+    void updateColorSpace(ColorSpace cs, QString name);
+    void save();
+    ColorSpace getLastModified() const;
 
 signals:
 
@@ -36,11 +41,12 @@ private:
     QString fileName;
     vector<ColorSpace> colorSpaces;
     QJsonObject mainObjectJSON;
+    ColorSpace lastModified;
 
 
     QString readFile(const QString &filename);
     ColorSpace jsonToColorSpace(QJsonObject obj);
-
+    QJsonObject colorSpaceToJson(ColorSpace cs);
 
 
     explicit ConfigDAO(QObject *parent = 0);

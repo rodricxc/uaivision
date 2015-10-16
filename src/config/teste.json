@@ -1,28 +1,40 @@
 {
     "colorSpaces": [
         {
-            "b": 0,
-            "g": 0,
-            "maxH": 255,
+            "H": 200,
+            "S": 3,
+            "V": 4,
+            "maxH": 33,
             "maxS": 255,
-            "maxV": 255,
+            "maxV": 77,
             "minH": 0,
             "minS": 0,
             "minV": 0,
-            "r": 255,
             "spaceName": "red"
         },
         {
-            "b": 255,
-            "g": 0,
-            "maxH": 255,
+            "H": 4,
+            "S": 3,
+            "V": 200,
+            "maxH": 30,
             "maxS": 255,
             "maxV": 255,
             "minH": 0,
             "minS": 0,
-            "minV": 0,
-            "r": 0,
+            "minV": 120,
             "spaceName": "blue"
+        },
+        {
+            "H": 0,
+            "S": 255,
+            "V": 1,
+            "maxH": 82,
+            "maxS": 109,
+            "maxV": 141,
+            "minH": 56,
+            "minS": 39,
+            "minV": 31,
+            "spaceName": "green"
         }
     ],
     "lastUpdate": {

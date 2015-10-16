@@ -122,7 +122,7 @@ vector<CalibPoint> MainQThread::getCalibData() const {
 }
 
 void MainQThread::trackFilteredObject(int &x, int &y, Mat threshold, Mat &cameraFeed) { // from https://raw.githubusercontent.com/kylehounslow/opencv-tuts/master/object-tracking-tut/objectTrackingTut.cpp
-  int MIN_OBJECT_AREA = 16;
+  int MIN_OBJECT_AREA = 12;
   int MAX_OBJECT_AREA = 4000;
   int MAX_NUM_OBJECTS = 100;
 
@@ -195,11 +195,11 @@ void MainQThread::drawObject(int x, int y, Mat &frame) { // from https://raw.git
 
 }
 
-void MainQThread::getThresholdSpace(int minH, int minS, int minV, int maxH, int maxS, int maxV) {
-  this->minHSV = Scalar(minH,minS,minV);
-  this->maxHSV = Scalar(maxH,maxS,maxV);
+void MainQThread::getThresholdSpace() {
+  ConfigDAO *config = ConfigDAO::Instance();
 
-  cout << "set min and max " << minH << endl;
+  this->minHSV = config->getLastModified().getMinHSV();
+  this->maxHSV = config->getLastModified().getMaxHSV();
 }
 
 void MainQThread::getSubTrapezoid(Mat &src, Mat &out, Point a, Point b, Point c, Point d) {
@@ -281,13 +281,6 @@ void MainQThread::run() {
 
      Mat erodeElement;
      Mat dilateElement;
-
-
-
-     ConfigDAO *config;
-     config  = ConfigDAO::Instance();
-     config->readJSON();
-     config->writeJSON();
 
 
 

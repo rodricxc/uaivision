@@ -1,31 +1,56 @@
-{ "lastUpdate": {
-        "date": "2015-06-04 17:00:00"
-    },
-    "name": "UaiSoccer Vision System",
+{
     "colorSpaces": [
         {
-            "spaceName": "red",
-            "r":255,
-            "g":0,
-            "b":0,
-            "minH": 0,
-            "minS": 0,
-            "minV": 0,
+            "b": 24,
+            "g": 24,
             "maxH": 255,
             "maxS": 255,
-            "maxV": 255
-        }, {
-            "spaceName": "blue",
-            "r":0,
-            "g":0,
-            "b":255,
+            "maxV": 244,
             "minH": 0,
             "minS": 0,
-            "minV": 0,
-            "maxH": 255,
+            "minV": 10,
+            "r": 255,
+            "spaceName": "red"
+        },
+        {
+            "b": 240,
+            "g": 50,
+            "maxH": 136,
             "maxS": 255,
-            "maxV": 255
+            "maxV": 143,
+            "minH": 100,
+            "minS": 50,
+            "minV": 98,
+            "r": 36,
+            "spaceName": "blue"
+        },
+        {
+            "b": 48,
+            "g": 230,
+            "maxH": 95,
+            "maxS": 94,
+            "maxV": 211,
+            "minH": 49,
+            "minS": 27,
+            "minV": 128,
+            "r": 28,
+            "spaceName": "green"
+        },
+        {
+            "b": 0,
+            "g": 255,
+            "maxH": 59,
+            "maxS": 150,
+            "maxV": 252,
+            "minH": 29,
+            "minS": 10,
+            "minV": 213,
+            "r": 243,
+            "spaceName": "yellow"
         }
-
-    ]
+    ],
+    "lastUpdate": {
+        "date": "2015-06-04 17:00:00"
+    },
+    "name": "UaiSoccer Vision System"
 }

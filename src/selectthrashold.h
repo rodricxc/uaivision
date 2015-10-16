@@ -2,6 +2,8 @@
 #define SELECTTHRASHOLD_H
 
 #include <QWidget>
+#include <QListWidgetItem>
+#include <colorspace.h>
 
 namespace Ui {
   class selectThrashold;
@@ -16,13 +18,35 @@ public:
   ~SelectThrashold();
 
 signals:
-  void changeIntervalThrashold(int,int,int,int,int,int);
+  void changedIntervalThrashold();
 
 public slots:
   void sendInterval(int t);
 
+private slots:
+  void on_colorDisplay_clicked();
+
+  void on_pushButton_clicked();
+
+
+
+  void on_listWidget_itemSelectionChanged();
+
+  void on_colorName_textChanged(const QString &arg1);
+
+  void on_pushButton_2_clicked();
+
 private:
+  int loaded;
+  QColor color;
   Ui::selectThrashold *ui;
+  void updateSpacesList();
+  void carregarColorSpace(ColorSpace cs);
+  ColorSpace insert();
+  QString currentItem;
+  ColorSpace *currentColorSpace();
+  ColorSpace atualColorSpace();
+  void updateColorSpace(ColorSpace cs, QString nome);
 };
 
 #endif // SELECTTHRASHOLD_H
