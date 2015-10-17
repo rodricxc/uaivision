@@ -28,6 +28,7 @@ SelectThrashold::SelectThrashold(QWidget *parent) :
   ui->colorDisplay->update();
 
   this->updateSpacesList();
+  this->loadUaiSoccerLogo();
 }
 
 SelectThrashold::~SelectThrashold() {
@@ -175,4 +176,27 @@ void SelectThrashold::on_pushButton_2_clicked() {
   ConfigDAO *config = ConfigDAO::Instance();
 
   config->save();
+}
+
+
+void SelectThrashold::displayImageSLOT(QImage image) {
+  loadImage(image);
+}
+
+void SelectThrashold::loadUaiSoccerLogo() {
+
+  this->loadImage("../src/images/UAISoccer.png");
+}
+
+void SelectThrashold::loadImage(QString filePath) {
+  QPixmap image;
+  if(image.load(filePath)){
+      ui->videoLabel->setPixmap(image.scaled(640,480,Qt::KeepAspectRatio));
+    } else {
+      cout <<"error on loading from file '" << filePath.toStdString() << "'" << endl;
+    }
+}
+
+void SelectThrashold::loadImage(QImage img) {
+  ui->videoLabel->setPixmap(QPixmap::fromImage(img.scaled(640,480,Qt::KeepAspectRatio)));
 }

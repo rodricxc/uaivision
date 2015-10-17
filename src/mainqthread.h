@@ -17,6 +17,7 @@
 #include "QTime"
 #include "calibpoint.h"
 #include "configdao.h"
+#include <QColor>
 
 using namespace cv;
 using namespace std;
@@ -57,6 +58,7 @@ private:
     Scalar maxHSV;
 
     void removeBorders(Mat &src, Mat &out, QPoint topLeft, QPoint bottomLeft, QPoint bottomRight, QPoint topRight, int width, int height);
+    void trackFilteredObject2(int &x, int &y, Mat threshold, Mat &cameraFeed, Scalar c);
 protected:
     virtual void run();
 };

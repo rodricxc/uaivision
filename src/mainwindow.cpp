@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(main, SIGNAL(displayImageSelectBorders(QImage)), selectBorder, SLOT(displayImageSLOT(QImage)));
     connect(main, SIGNAL(sendCalibData()), this, SLOT(addData()));
 
-    connect(main, SIGNAL(displayThrashold(QImage)), thrasholded, SLOT(displayImageSLOT(QImage)));
+    connect(main, SIGNAL(displayThrashold(QImage)), selectThrashold, SLOT(displayImageSLOT(QImage)));
     connect(selectThrashold, SIGNAL(changedIntervalThrashold()), main, SLOT(getThresholdSpace()));
 
 
@@ -72,7 +72,7 @@ void MainWindow::getThresholdSpace(int minH, int minS, int minV, int maxH, int m
   this->minHSV = Scalar(minH,minS,minV);
   this->maxHSV = Scalar(maxH,maxS,maxV);
 
-  cout << "set min and max " << minH << endl;
+ // cout << "set min and max " << minH << endl;
 }
 
 void MainWindow::frameRateConfig() {

@@ -9,8 +9,6 @@ MainQThread::MainQThread() {
     srand (time(NULL));
 }
 
-
-
 vector<CalibPoint> MainQThread::getRandomPixels(Mat &image, int numPoits, Marker A, Marker B, Marker C) {
     vector<CalibPoint>  pixels;
 
@@ -169,6 +167,61 @@ void MainQThread::trackFilteredObject(int &x, int &y, Mat threshold, Mat &camera
     }
 }
 
+void MainQThread::trackFilteredObject2(int &x, int &y, Mat threshold, Mat &cameraFeed,Scalar c) { // from https://raw.githubusercontent.com/kylehounslow/opencv-tuts/master/object-tracking-tut/objectTrackingTut.cpp
+  int MIN_OBJECT_AREA = 25;
+  int MAX_OBJECT_AREA = 40000;
+  int MAX_NUM_OBJECTS = 100;
+
+  Scalar color  = Scalar(c[2],c[1],c[0]);
+
+  Mat temp;
+  threshold.copyTo(temp);
+  vector< vector<Point> > contours;
+  vector<Vec4i> hierarchy;
+  //find contours of filtered image using openCV findContours function
+  findContours(temp,contours,hierarchy,CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE );
+
+  vector<vector<Point> > hull( contours.size() );
+  for( int i = 0; i < contours.size(); i++ )
+        {  convexHull( Mat(contours[i]), hull[i], false ); }
+
+  //use moments method to find our filtered object
+  double refArea = 0;
+  bool objectFound = false;
+  if (hierarchy.size() > 0) {
+      int numObjects = hierarchy.size();
+      //if number of objects greater than MAX_NUM_OBJECTS we have a noisy filter
+      if(numObjects<MAX_NUM_OBJECTS){
+          for (int index = 0; index < hierarchy.size(); index = hierarchy[index][0]) {
+
+              Moments moment = moments((cv::Mat)contours[index]);
+              double area = moment.m00;
+
+
+              if(area>MIN_OBJECT_AREA ){
+              //    if(area>MIN_OBJECT_AREA && area<MAX_OBJECT_AREA ){
+                  x = moment.m10/area;
+                  y = moment.m01/area;
+                  objectFound = true;
+                  refArea = area;
+                  //drawObject(x,y,cameraFeed);
+                  //drawContours( cameraFeed, contours, index, color, CV_FILLED, 8, hierarchy, 0, Point() );
+                  drawContours( cameraFeed, hull, index, color, CV_FILLED, 8, hierarchy, 0, Point() );
+                }
+
+
+            }
+          if(objectFound ==true){
+             // putText(cameraFeed,"Tracking Object",Point(0,50),2,1,Scalar(0,255,0),2);
+          }
+
+        } else {
+          putText(cameraFeed,"TOO MUCH NOISE! ADJUST FILTER",Point(0,50),1,2,Scalar(0,0,255),2);
+        }
+    }
+}
+
+
 void MainQThread::drawObject(int x, int y, Mat &frame) { // from https://raw.githubusercontent.com/kylehounslow/opencv-tuts/master/object-tracking-tut/objectTrackingTut.cpp
   //use some of the openCV drawing functions to draw crosshairs
   //on your tracked image!
@@ -257,7 +310,6 @@ Point MainQThread::pointFromQPoint(QPoint p, double inWidth, double inHeight, do
   return ret;
 }
 
-
 void MainQThread::removeBorders(Mat &src, Mat &out, QPoint topLeft, QPoint bottomLeft, QPoint bottomRight, QPoint topRight, int width, int height) {
 
 
@@ -323,8 +375,6 @@ void MainQThread::removeBorders(Mat &src, Mat &out, QPoint topLeft, QPoint botto
     out = rotated.clone();
 //*/
 }
-
-
 
 void MainQThread::run() {
 
@@ -516,8 +566,19 @@ void MainQThread::run() {
             //imshow("in",InImage);
             //cv::waitKey(30);
             //imshow("Camera", cameraFrame);
+
+
+
             Mat thresh;
-            inRange(imageHSV,this->minHSV,this->maxHSV,thresh);
+
+            vector<ColorSpace> colorSpaces = config->getColorSpaces();
+            vector<ColorSpace>::iterator it = colorSpaces.begin();
+            ColorSpace cs;
+
+
+            for (; it!= colorSpaces.end(); it++) {
+                cs = *(it);
+                inRange(imageHSV,cs.getMinHSV(),cs.getMaxHSV(),thresh);
 
                     Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));
                 //dilate with larger element so make sure object is nicely visible
@@ -525,22 +586,45 @@ void MainQThread::run() {
 
                     erode(thresh,thresh,erodeElement);
                     //erode(thresh,thresh,erodeElement);
-                    //dilate(thresh,thresh,dilateElement);
-                    dilate(thresh,thresh,dilateElement);
+                    //dilate(thresh,thresh,erodeElement);
+                    //dilate(thresh,thresh,erodeElement);
+                    dilate(thresh,thresh,erodeElement);
                     int x = 0, y = 0;
-                    trackFilteredObject(x,y,thresh,imageHSV);
+                    trackFilteredObject2(x,y,thresh,cameraFrame, cs.getColor());
+
+
+
+
+
+            }
+
+
+
+
+                inRange(imageHSV,this->minHSV,this->maxHSV,thresh);
+
+                    Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));
+                //dilate with larger element so make sure object is nicely visible
+                    Mat dilateElement = getStructuringElement( MORPH_RECT,Size(5,5));
+
+                    erode(thresh,thresh,erodeElement);
+                    //erode(thresh,thresh,erodeElement);
+                    //dilate(thresh,thresh,erodeElement);
+                    //dilate(thresh,thresh,erodeElement);
+                    dilate(thresh,thresh,erodeElement);
+
 
             QImage imgs = Utils::mat2QImage(thresh);
             emit displayThrashold(imgs);
 
 
-            QImage imgss = Utils::mat2QImage(cameraFrame);
-            emit displayThisImageMin(imgss);
+            //QImage imgss = Utils::mat2QImage(cameraFrame);
+            //emit displayThisImageMin(imgss);
 
             QImage imgsss = Utils::mat2QImage(cameraFrameRow);
             emit displayImageSelectBorders(imgsss);
 
-            QImage img = Utils::mat2QImage(imageHSV);
+            QImage img = Utils::mat2QImage(cameraFrame);
             emit displayThisImage(img);
             //this->usleep(100);
 

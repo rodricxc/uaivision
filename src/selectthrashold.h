@@ -23,6 +23,7 @@ signals:
 public slots:
   void sendInterval(int t);
 
+  void displayImageSLOT(QImage image);
 private slots:
   void on_colorDisplay_clicked();
 
@@ -47,6 +48,9 @@ private:
   ColorSpace *currentColorSpace();
   ColorSpace atualColorSpace();
   void updateColorSpace(ColorSpace cs, QString nome);
+  void loadImage(QImage img);
+  void loadImage(QString filePath);
+  void loadUaiSoccerLogo();
 };
 
 #endif // SELECTTHRASHOLD_H

@@ -224,8 +224,8 @@ void ConfigDAO::save() {
 
   QJsonObject borders;
   borders["topLeft"] = qPointToJson(this->getCornerLeftTop());
-  borders["topRight"] = qPointToJson(this->getCornerLeftBottom());
-  borders["bottomLeft"] = qPointToJson(this->getCornerRightTop());
+  borders["topRight"] = qPointToJson(this->getCornerRightTop());
+  borders["bottomLeft"] = qPointToJson(this->getCornerLeftBottom());
   borders["bottomRight"] = qPointToJson(this->getCornerRightBottom());
   mainObjectJSON["fieldBorders"] = borders;
 
