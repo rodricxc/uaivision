@@ -11,6 +11,7 @@
 #include <iostream>
 #include <QFile>
 #include <QTextStream>
+#include <QPoint>
 
 using namespace std;
 using namespace cv;
@@ -31,6 +32,19 @@ public:
     void updateColorSpace(ColorSpace cs, QString name);
     void save();
     ColorSpace getLastModified() const;
+
+    QPoint getCornerLeftTop() const;
+    void setCornerLeftTop(const QPoint &value);
+
+    QPoint getCornerLeftBottom() const;
+    void setCornerLeftBottom(const QPoint &value);
+
+    QPoint getCornerRightTop() const;
+    void setCornerRightTop(const QPoint &value);
+
+    QPoint getCornerRightBottom() const;
+    void setCornerRightBottom(const QPoint &value);
+
 
 signals:
 
@@ -53,6 +67,15 @@ private:
     ConfigDAO(ConfigDAO const&) {};
     ConfigDAO& operator=(ConfigDAO const&){};
 
+
+    QPoint cornerLeftTop;
+    QPoint cornerLeftBottom;
+    QPoint cornerRightTop;
+    QPoint cornerRightBottom;
+
+
+    QPoint jsonToQPoint(QJsonObject obj);
+    QJsonObject qPointToJson(QPoint p);
 };
 
 #endif // CONFIGDAO_H

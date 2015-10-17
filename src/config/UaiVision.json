@@ -1,54 +1,108 @@
 {
     "colorSpaces": [
         {
-            "b": 24,
-            "g": 24,
-            "maxH": 255,
-            "maxS": 255,
-            "maxV": 244,
-            "minH": 0,
-            "minS": 0,
-            "minV": 10,
-            "r": 255,
-            "spaceName": "red"
+            "b": 146,
+            "g": 37,
+            "maxH": 170,
+            "maxS": 246,
+            "maxV": 255,
+            "minH": 140,
+            "minS": 86,
+            "minV": 113,
+            "r": 203,
+            "spaceName": "purple"
         },
         {
-            "b": 240,
-            "g": 50,
-            "maxH": 136,
+            "b": 217,
+            "g": 36,
+            "maxH": 138,
             "maxS": 255,
-            "maxV": 143,
-            "minH": 100,
-            "minS": 50,
-            "minV": 98,
-            "r": 36,
+            "maxV": 255,
+            "minH": 90,
+            "minS": 53,
+            "minV": 120,
+            "r": 15,
             "spaceName": "blue"
         },
         {
-            "b": 48,
-            "g": 230,
-            "maxH": 95,
-            "maxS": 94,
-            "maxV": 211,
-            "minH": 49,
-            "minS": 27,
-            "minV": 128,
-            "r": 28,
+            "b": 23,
+            "g": 180,
+            "maxH": 94,
+            "maxS": 255,
+            "maxV": 239,
+            "minH": 58,
+            "minS": 50,
+            "minV": 83,
+            "r": 24,
             "spaceName": "green"
         },
         {
-            "b": 0,
-            "g": 255,
-            "maxH": 59,
-            "maxS": 150,
-            "maxV": 252,
+            "b": 12,
+            "g": 253,
+            "maxH": 48,
+            "maxS": 153,
+            "maxV": 255,
             "minH": 29,
-            "minS": 10,
-            "minV": 213,
-            "r": 243,
+            "minS": 46,
+            "minV": 218,
+            "r": 247,
             "spaceName": "yellow"
+        },
+        {
+            "b": 0,
+            "g": 141,
+            "maxH": 16,
+            "maxS": 188,
+            "maxV": 211,
+            "minH": 4,
+            "minS": 108,
+            "minV": 163,
+            "r": 255,
+            "spaceName": "orange"
+        },
+        {
+            "b": 255,
+            "g": 255,
+            "maxH": 255,
+            "maxS": 17,
+            "maxV": 255,
+            "minH": 0,
+            "minS": 0,
+            "minV": 128,
+            "r": 255,
+            "spaceName": "white"
+        },
+        {
+            "b": 0,
+            "g": 0,
+            "maxH": 255,
+            "maxS": 255,
+            "maxV": 109,
+            "minH": 0,
+            "minS": 0,
+            "minV": 0,
+            "r": 0,
+            "spaceName": "black"
         }
     ],
+    "fieldBorders": {
+        "bottomLeft": {
+            "x": 563,
+            "y": 3
+        },
+        "bottomRight": {
+            "x": 567,
+            "y": 479
+        },
+        "topLeft": {
+            "x": 85,
+            "y": 11
+        },
+        "topRight": {
+            "x": 86,
+            "y": 476
+        }
+    },
     "lastUpdate": {
         "date": "2015-06-04 17:00:00"
     },

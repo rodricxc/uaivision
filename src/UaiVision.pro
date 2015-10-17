@@ -40,7 +40,9 @@ SOURCES += main.cpp\
     calibpoint.cpp \
     showimage.cpp \
     selectthrashold.cpp \
-    colorspace.cpp
+    colorspace.cpp \
+    selectborder.cpp \
+    videolabel.cpp
 
 HEADERS  += mainwindow.h \
     mainqthread.h \
@@ -53,12 +55,15 @@ HEADERS  += mainwindow.h \
     calibpoint.h \
     showimage.h \
     selectthrashold.h \
-    colorspace.h
+    colorspace.h \
+    selectborder.h \
+    videolabel.h
 
 FORMS    += mainwindow.ui \
     glwindow.ui \
     showimage.ui \
-    selectthrashold.ui
+    selectthrashold.ui \
+    selectborder.ui
 
 DISTFILES += \
     UAISoccer.png \

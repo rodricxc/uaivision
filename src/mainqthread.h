@@ -32,10 +32,12 @@ public:
     vector<CalibPoint> getCalibData() const;
     void trackFilteredObject(int &x, int &y, Mat threshold, Mat &cameraFeed);
     void drawObject(int x, int y,Mat &frame);
+    Point pointFromQPoint(QPoint p, double inWidth, double inHeight, double outWidth, double outHeight);
 signals:
     void displayThrashold(QImage image);
     void displayThisImage(QImage image);
     void displayThisImageMin(QImage image);
+    void displayImageSelectBorders(QImage image);
     void sendCalibData();
 
 public slots:
@@ -54,6 +56,7 @@ private:
     Scalar minHSV;
     Scalar maxHSV;
 
+    void removeBorders(Mat &src, Mat &out, QPoint topLeft, QPoint bottomLeft, QPoint bottomRight, QPoint topRight, int width, int height);
 protected:
     virtual void run();
 };

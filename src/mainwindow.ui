@@ -539,6 +539,7 @@
     <addaction name="actionGLColors"/>
     <addaction name="actionThresholded_Image"/>
     <addaction name="actionThrashold_Colors"/>
+    <addaction name="actionSelect_Borders"/>
    </widget>
    <addaction name="menuTools"/>
   </widget>
@@ -564,6 +565,11 @@
   <action name="actionThrashold_Colors">
    <property name="text">
     <string>Thrashold Colors</string>
+   </property>
+  </action>
+  <action name="actionSelect_Borders">
+   <property name="text">
+    <string>Select Borders</string>
    </property>
   </action>
  </widget>

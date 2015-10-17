@@ -8,6 +8,39 @@ ConfigDAO::ConfigDAO(QObject *parent) : QObject(parent) {
   this->readJSON();
 }
 
+QPoint ConfigDAO::getCornerRightBottom() const {
+  return cornerRightBottom;
+}
+
+void ConfigDAO::setCornerRightBottom(const QPoint &value) {
+  cornerRightBottom = value;
+}
+
+QPoint ConfigDAO::getCornerRightTop() const {
+  return cornerRightTop;
+}
+
+void ConfigDAO::setCornerRightTop(const QPoint &value) {
+  cornerRightTop = value;
+}
+
+QPoint ConfigDAO::getCornerLeftBottom() const {
+  return cornerLeftBottom;
+}
+
+void ConfigDAO::setCornerLeftBottom(const QPoint &value) {
+  cornerLeftBottom = value;
+}
+
+QPoint ConfigDAO::getCornerLeftTop() const {
+  return cornerLeftTop;
+}
+
+void ConfigDAO::setCornerLeftTop(const QPoint &value) {
+  cornerLeftTop = value;
+}
+
+
 bool ConfigDAO::readJSON() {
 
   QString json = readFile(this->fileName);
@@ -39,6 +72,18 @@ bool ConfigDAO::readJSON() {
           ColorSpace c = jsonToColorSpace(obj);
           this->colorSpaces.push_back(c);
         }
+
+      QJsonObject bord= mainObjectJSON["fieldBorders"].toObject();
+
+      this->setCornerLeftTop(this->jsonToQPoint(bord["topLeft"].toObject()));
+      this->setCornerRightTop(this->jsonToQPoint(bord["topRight"].toObject()));
+      this->setCornerLeftBottom(this->jsonToQPoint(bord["bottomLeft"].toObject()));
+      this->setCornerRightBottom(this->jsonToQPoint(bord["bottomRight"].toObject()));
+
+
+      //cout << "left top: " <<getCornerLeftTop().x() << ", " << getCornerLeftTop().y() << endl;
+
+
 
       //cout << "num of color spaces: " << colorSpaces.size() << endl;
 
@@ -136,6 +181,22 @@ QJsonObject ConfigDAO::colorSpaceToJson(ColorSpace cs) {
   return obj;
 }
 
+QPoint ConfigDAO::jsonToQPoint(QJsonObject obj) {
+  return QPoint(obj["x"].toInt(),obj["y"].toInt());//*/
+}
+
+
+QJsonObject ConfigDAO::qPointToJson(QPoint p) {
+  QJsonObject obj;
+
+  obj["x"] = p.x();
+  obj["y"] = p.y();
+
+  return obj;
+}
+
+
+
 void ConfigDAO:: updateColorSpace(ColorSpace cs, QString name){
   this->lastModified = cs;
   vector<ColorSpace>::iterator it = colorSpaces.begin();
@@ -154,13 +215,20 @@ void ConfigDAO::save() {
   //save SpaceColors
 
   QJsonArray spaces;
-
   vector<ColorSpace>::iterator it;
-  ColorSpace i;
   for (it = this->colorSpaces.begin(); it != this->colorSpaces.end(); it++){
       spaces.append(this->colorSpaceToJson((*it)));
     }
   mainObjectJSON["colorSpaces"] = spaces;
+
+
+  QJsonObject borders;
+  borders["topLeft"] = qPointToJson(this->getCornerLeftTop());
+  borders["topRight"] = qPointToJson(this->getCornerLeftBottom());
+  borders["bottomLeft"] = qPointToJson(this->getCornerRightTop());
+  borders["bottomRight"] = qPointToJson(this->getCornerRightBottom());
+  mainObjectJSON["fieldBorders"] = borders;
+
 
   this->writeJSON();
 

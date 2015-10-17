@@ -123,7 +123,7 @@ vector<CalibPoint> MainQThread::getCalibData() const {
 
 void MainQThread::trackFilteredObject(int &x, int &y, Mat threshold, Mat &cameraFeed) { // from https://raw.githubusercontent.com/kylehounslow/opencv-tuts/master/object-tracking-tut/objectTrackingTut.cpp
   int MIN_OBJECT_AREA = 12;
-  int MAX_OBJECT_AREA = 4000;
+  int MAX_OBJECT_AREA = 40000;
   int MAX_NUM_OBJECTS = 100;
 
   Mat temp;
@@ -250,6 +250,81 @@ void MainQThread::getSubTrapezoid(Mat &src, Mat &out, Point a, Point b, Point c,
 
 }
 
+Point MainQThread::pointFromQPoint(QPoint p, double inWidth, double inHeight, double outWidth, double outHeight) {
+  Point2f ret;
+  ret.x = (int)p.x()*1.0*(outWidth/inWidth);
+  ret.y = (int)p.y()*1.0*(outHeight/inHeight);
+  return ret;
+}
+
+
+void MainQThread::removeBorders(Mat &src, Mat &out, QPoint topLeft, QPoint bottomLeft, QPoint bottomRight, QPoint topRight, int width, int height) {
+
+
+  if (topLeft.x()<0 || topRight.x()<0 || bottomLeft.x()<0 || bottomRight.x()<0) {
+      out = src.clone();
+      cout << "Error whent trying to remove borders of the field" << endl;
+      return;
+  }
+
+
+
+
+
+
+
+  Point a =pointFromQPoint(topLeft, 640, 480, src.cols, src.rows);
+  Point b =pointFromQPoint(bottomLeft, 640, 480, src.cols, src.rows);
+  Point c =pointFromQPoint(bottomRight, 640, 480, src.cols, src.rows);
+  Point d =pointFromQPoint(topRight, 640, 480, src.cols, src.rows);
+
+    //http://stackoverflow.com/questions/7838487/executing-cvwarpperspective-for-a-fake-deskewing-on-a-set-of-cvpoint
+    // and http://stackoverflow.com/questions/14179164/opencv-image-transformation-and-perspective-change
+
+
+   /* vector<Point> not_a_rect_shape;
+    not_a_rect_shape.push_back(a);
+    not_a_rect_shape.push_back(b);
+    not_a_rect_shape.push_back(c);
+    not_a_rect_shape.push_back(d);
+
+    // For debugging purposes, draw green lines connecting those points
+    // and save it on disk
+//    /*
+    const Point* point = &not_a_rect_shape[0];
+    int n = (int)not_a_rect_shape.size();
+    Mat draw = src.clone();
+    polylines(draw, &point, &n, 1, true, Scalar(0, 255, 0), 3, CV_AA);
+    imwrite("draw.jpg", draw);
+*/
+
+     Point2f src_vertices[4];
+    src_vertices[0] = a;
+    src_vertices[1] = b;
+    src_vertices[2] = c;
+    src_vertices[3] = d;
+
+    Point2f dst_vertices[4];
+    dst_vertices[0] = Point(0, 0);
+    dst_vertices[1] = Point(0, height-1);
+    dst_vertices[2] = Point(width-1, height-1);
+    dst_vertices[3] = Point(width-1, 0);
+
+    Mat warpPerspectiveMatrix = getPerspectiveTransform(src_vertices, dst_vertices);
+
+    cv::Mat rotated;
+    cv::Size size(width, height);
+
+    //warpAffine(src, rotated, warpAffineMatrix, size, INTER_LINEAR, BORDER_CONSTANT);
+    warpPerspective(src, rotated, warpPerspectiveMatrix, size);
+
+
+    //imwrite("draw.jpg", rotated);
+    out = rotated.clone();
+//*/
+}
+
+
 
 void MainQThread::run() {
 
@@ -262,6 +337,7 @@ void MainQThread::run() {
         cout << "cannot open camera";
         return;
     }
+    Mat cameraFrameRow;
     Mat cameraFrame;
     Mat imageHSV;
     MarkerDetector MDetector;
@@ -283,6 +359,7 @@ void MainQThread::run() {
      Mat dilateElement;
 
 
+     ConfigDAO *config = ConfigDAO::Instance();
 
 
 
@@ -290,16 +367,23 @@ void MainQThread::run() {
     if (!this->isInterruptionRequested()){
 
 
-        camera.read(cameraFrame);
+        camera.read(cameraFrameRow);
 
         while(!this->isInterruptionRequested()){
+
+            this->minHSV = config->getLastModified().getMinHSV();
+            this->maxHSV = config->getLastModified().getMaxHSV();
+            this->removeBorders(cameraFrameRow, cameraFrame, config->getCornerLeftTop(), config->getCornerLeftBottom(), config->getCornerRightBottom(), config->getCornerRightTop(), 640,480);
+
+
+
 
 
             cvtColor(cameraFrame, imageHSV, CV_BGR2HSV);
             //*
 
 
-
+/*
             //Ok, let's detect
             MDetector.detect(cameraFrame,Markers);
             //for each marker, draw info and its boundaries in the image
@@ -313,7 +397,7 @@ void MainQThread::run() {
             }
 
 
-
+*/
 
 
             if (false) {
@@ -453,6 +537,9 @@ void MainQThread::run() {
             QImage imgss = Utils::mat2QImage(cameraFrame);
             emit displayThisImageMin(imgss);
 
+            QImage imgsss = Utils::mat2QImage(cameraFrameRow);
+            emit displayImageSelectBorders(imgsss);
+
             QImage img = Utils::mat2QImage(imageHSV);
             emit displayThisImage(img);
             //this->usleep(100);
@@ -461,7 +548,7 @@ void MainQThread::run() {
             //cout << "frame rate: "<< 1/(frameRateTime.msecsTo(QTime::currentTime())/1000.0)<<" fps"<<endl;
 
             //frameRateTime = QTime::currentTime();
-            camera.read(cameraFrame);
+            camera.read(cameraFrameRow);
         }
     }
 }

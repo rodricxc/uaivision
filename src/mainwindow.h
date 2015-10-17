@@ -9,6 +9,7 @@
 #include "QTime"
 #include "showimage.h"
 #include "selectthrashold.h"
+#include "selectborder.h"
 
 namespace Ui {
 class MainWindow;
@@ -37,6 +38,8 @@ private slots:
     void on_actionThrashold_Colors_triggered();
     void addData();
 
+    void on_actionSelect_Borders_triggered();
+
 private:
     QLabel *frameRateLabel;
     QTime frameRateTime;
@@ -47,6 +50,7 @@ private:
     GLWindow *glWindow;
     ShowImage *thrasholded;
     SelectThrashold *selectThrashold;
+    SelectBorder *selectBorder;
 
     Scalar minHSV;
     Scalar maxHSV;

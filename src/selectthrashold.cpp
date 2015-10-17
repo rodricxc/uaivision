@@ -13,12 +13,12 @@ SelectThrashold::SelectThrashold(QWidget *parent) :
   ui->setupUi(this);
   this->loaded = 0;
 
-  connect(ui->s_max_h, SIGNAL(sliderMoved(int)), this, SLOT(sendInterval(int)));
-  connect(ui->s_max_s, SIGNAL(sliderMoved(int)), this, SLOT(sendInterval(int)));
-  connect(ui->s_max_v, SIGNAL(sliderMoved(int)), this, SLOT(sendInterval(int)));
-  connect(ui->s_min_h, SIGNAL(sliderMoved(int)), this, SLOT(sendInterval(int)));
-  connect(ui->s_min_s, SIGNAL(sliderMoved(int)), this, SLOT(sendInterval(int)));
-  connect(ui->s_min_v, SIGNAL(sliderMoved(int)), this, SLOT(sendInterval(int)));
+  connect(ui->s_max_h, SIGNAL(valueChanged(int)), this, SLOT(sendInterval(int)));
+  connect(ui->s_max_s, SIGNAL(valueChanged(int)), this, SLOT(sendInterval(int)));
+  connect(ui->s_max_v, SIGNAL(valueChanged(int)), this, SLOT(sendInterval(int)));
+  connect(ui->s_min_h, SIGNAL(valueChanged(int)), this, SLOT(sendInterval(int)));
+  connect(ui->s_min_s, SIGNAL(valueChanged(int)), this, SLOT(sendInterval(int)));
+  connect(ui->s_min_v, SIGNAL(valueChanged(int)), this, SLOT(sendInterval(int)));
 
   const QString COLOR_STYLE("QPushButton { background-color : %1;}");
 
@@ -36,7 +36,7 @@ SelectThrashold::~SelectThrashold() {
 
 void SelectThrashold::sendInterval(int t) {
   emit changedIntervalThrashold();
-  std::cout << "mandou" << std::endl;
+ // std::cout << "mandou" << std::endl;
   updateColorSpace(this->atualColorSpace(), this->currentItem);
 }
 

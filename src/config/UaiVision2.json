@@ -1,43 +1,110 @@
-{ 
-	"colors": [
-		{	
-			"color": "orange",
-            "r": 255,
-            "g": 153,
-			"b": 0,
-			"hMin": 0,
-			"hMax": 255,
-			"sMin": 0,
-			"sMax": 255,
-			"vMin": 0,
-			"vMax": 255,
+{
+    "colorSpaces": [
+        {
+            "b": 146,
+            "g": 37,
+            "maxH": 170,
+            "maxS": 246,
+            "maxV": 255,
+            "minH": 140,
+            "minS": 86,
+            "minV": 113,
+            "r": 203,
+            "spaceName": "purple"
         },
         {
-            "color": "blue",
-            "r": 0,
-            "g": 0,
-            "b": 255,
-            "hMin": 0,
-            "hMax": 255,
-            "sMin": 0,
-            "sMax": 255,
-            "vMin": 0,
-            "vMax": 255,
+            "b": 217,
+            "g": 36,
+            "maxH": 138,
+            "maxS": 255,
+            "maxV": 255,
+            "minH": 90,
+            "minS": 53,
+            "minV": 120,
+            "r": 15,
+            "spaceName": "blue"
         },
         {
-            "color": "red",
-            "r": 255,
-            "g": 0,
+            "b": 23,
+            "g": 180,
+            "maxH": 94,
+            "maxS": 255,
+            "maxV": 239,
+            "minH": 58,
+            "minS": 50,
+            "minV": 83,
+            "r": 24,
+            "spaceName": "green"
+        },
+        {
+            "b": 12,
+            "g": 253,
+            "maxH": 48,
+            "maxS": 153,
+            "maxV": 255,
+            "minH": 29,
+            "minS": 46,
+            "minV": 218,
+            "r": 247,
+            "spaceName": "yellow"
+        },
+        {
             "b": 0,
-            "hMin": 0,
-            "hMax": 255,
-            "sMin": 0,
-            "sMax": 255,
-            "vMin": 0,
-            "vMax": 255,
+            "g": 141,
+            "maxH": 12,
+            "maxS": 178,
+            "maxV": 200,
+            "minH": 7,
+            "minS": 108,
+            "minV": 163,
+            "r": 255,
+            "spaceName": "orange"
+        },
+        {
+            "b": 255,
+            "g": 255,
+            "maxH": 255,
+            "maxS": 17,
+            "maxV": 255,
+            "minH": 0,
+            "minS": 0,
+            "minV": 128,
+            "r": 255,
+            "spaceName": "white"
+        },
+        {
+            "b": 0,
+            "g": 0,
+            "maxH": 255,
+            "maxS": 255,
+            "maxV": 119,
+            "minH": 0,
+            "minS": 0,
+            "minV": 0,
+            "r": 0,
+            "spaceName": "black"
         }
     ],
+    "fieldBorders": {
+        "bottomLeft": {
+            "x": 563,
+            "y": 3
+        },
+        "bottomRight": {
+            "x": 567,
+            "y": 479
+        },
+        "topLeft": {
+            "x": 85,
+            "y": 11
+        },
+        "topRight": {
+            "x": 86,
+            "y": 476
+        }
+    },
     "lastUpdate": {
         "date": "2015-06-04 17:00:00"
-    }
+    },
+    "name": "UaiSoccer Vision System"
 }

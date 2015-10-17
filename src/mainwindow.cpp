@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->glWindow = new GLWindow();
     this->thrasholded = new ShowImage();
     this->selectThrashold = new SelectThrashold();
+    this->selectBorder = new SelectBorder();
+
     //glWindow->setVisible(true);
     main  = new MainQThread();
     scene = new QGraphicsScene(this);
@@ -20,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->start, SIGNAL(pressed()), this, SLOT(startMain()));
     connect(main, SIGNAL(displayThisImage(QImage)), this, SLOT(displayImageSLOT(QImage)));
     connect(main, SIGNAL(displayThisImageMin(QImage)), this, SLOT(displayImageMinSLOT(QImage)));
+    connect(main, SIGNAL(displayImageSelectBorders(QImage)), selectBorder, SLOT(displayImageSLOT(QImage)));
     connect(main, SIGNAL(sendCalibData()), this, SLOT(addData()));
 
     connect(main, SIGNAL(displayThrashold(QImage)), thrasholded, SLOT(displayImageSLOT(QImage)));
@@ -127,4 +130,8 @@ void MainWindow::on_actionThrashold_Colors_triggered() {
 
 void MainWindow::addData() {
     this->glWindow->addData(main->getCalibData());
+}
+
+void MainWindow::on_actionSelect_Borders_triggered() {
+  this->selectBorder->setVisible(true);
 }
