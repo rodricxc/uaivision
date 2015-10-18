@@ -11,15 +11,12 @@ using namespace std;
 class Camera {
 public:
 
-    static Camera getCamera() {
-        static Camera camera;
-        return camera;
-    }
+    static Camera *getCamera();
     bool isOpened();
     void read(cv::Mat &im);
 
 private:
-
+    static Camera *camera;
     VideoCapture *videoCapture;
     void startVideoCapture();
     void stopVideoCapture();

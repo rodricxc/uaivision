@@ -11,8 +11,17 @@ SelectBorder::SelectBorder(QWidget *parent) :
   connect(ui->videoLabel, SIGNAL(clicked(QPoint)), this, SLOT(labelClicked(QPoint)));
 
 
+  ConfigDAO *config = ConfigDAO::Instance();
 
   this->loadUaiSoccerLogo();
+
+
+  this->ui->width->setValue(config->getFieldWidth());
+  this->ui->height->setValue(config->getFieldHeight());
+  this->ui->border->setValue(config->getFieldBorder());
+  this->ui->goalDepth->setValue(config->getFieldGoalDepth());
+  this->ui->goalSize->setValue(config->getFieldGoalSize());
+
 }
 
 SelectBorder::~SelectBorder() {
@@ -108,4 +117,24 @@ void SelectBorder::drawLine(QPoint pA,QPoint pB, QPixmap *pixmap) {
 
 void SelectBorder::on_saveButton_clicked() {
   ConfigDAO::Instance()->save();
+}
+
+void SelectBorder::on_width_valueChanged(int arg1) {
+    ConfigDAO::Instance()->setFieldWidth(arg1);
+}
+
+void SelectBorder::on_height_valueChanged(int arg1) {
+    ConfigDAO::Instance()->setFieldHeight(arg1);
+}
+
+void SelectBorder::on_border_valueChanged(int arg1) {
+    ConfigDAO::Instance()->setFieldBorder(arg1);
+}
+
+void SelectBorder::on_goalSize_valueChanged(int arg1) {
+    ConfigDAO::Instance()->setFieldGoalSize(arg1);
+}
+
+void SelectBorder::on_goalDepth_valueChanged(int arg1) {
+    ConfigDAO::Instance()->setFieldGoalDepth(arg1);
 }

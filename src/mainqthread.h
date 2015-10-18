@@ -58,7 +58,8 @@ private:
     Scalar maxHSV;
 
     void removeBorders(Mat &src, Mat &out, QPoint topLeft, QPoint bottomLeft, QPoint bottomRight, QPoint topRight, int width, int height);
-    void trackFilteredObject2(int &x, int &y, Mat threshold, Mat &cameraFeed, Scalar c);
+    vector<Point>  trackFilteredObject2(Mat threshold, Mat &cameraFeed, Scalar c);
+    void markers();
 protected:
     virtual void run();
 };

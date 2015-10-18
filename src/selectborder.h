@@ -30,6 +30,16 @@ public slots:
 private slots:
   void on_saveButton_clicked();
 
+  void on_width_valueChanged(int arg1);
+
+  void on_height_valueChanged(int arg1);
+
+  void on_border_valueChanged(int arg1);
+
+  void on_goalSize_valueChanged(int arg1);
+
+  void on_goalDepth_valueChanged(int arg1);
+
 private:
   Ui::selectBorder *ui;
   QPoint clickPosition;

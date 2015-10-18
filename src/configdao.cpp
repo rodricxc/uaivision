@@ -7,6 +7,56 @@ ConfigDAO::ConfigDAO(QObject *parent) : QObject(parent) {
   cout << "Starting dao with config file from: " << fileName.toStdString() << endl;
   this->readJSON();
 }
+int ConfigDAO::getFieldBorder() const
+{
+  return fieldBorder;
+}
+
+void ConfigDAO::setFieldBorder(int value)
+{
+  fieldBorder = value;
+}
+
+int ConfigDAO::getFieldHeight() const
+{
+  return fieldHeight;
+}
+
+void ConfigDAO::setFieldHeight(int value)
+{
+  fieldHeight = value;
+}
+
+int ConfigDAO::getFieldWidth() const
+{
+  return fieldWidth;
+}
+
+void ConfigDAO::setFieldWidth(int value)
+{
+  fieldWidth = value;
+}
+
+int ConfigDAO::getFieldGoalDepth() const
+{
+  return fieldGoalDepth;
+}
+
+void ConfigDAO::setFieldGoalDepth(int value)
+{
+  fieldGoalDepth = value;
+}
+
+int ConfigDAO::getFieldGoalSize() const
+{
+  return fieldGoalSize;
+}
+
+void ConfigDAO::setFieldGoalSize(int value)
+{
+  fieldGoalSize = value;
+}
+
 
 QPoint ConfigDAO::getCornerRightBottom() const {
   return cornerRightBottom;
@@ -80,10 +130,14 @@ bool ConfigDAO::readJSON() {
       this->setCornerLeftBottom(this->jsonToQPoint(bord["bottomLeft"].toObject()));
       this->setCornerRightBottom(this->jsonToQPoint(bord["bottomRight"].toObject()));
 
+      QJsonObject field= mainObjectJSON["field"].toObject();
+      this->setFieldBorder(field["border"].toInt());
+      this->setFieldWidth(field["width"].toInt());
+      this->setFieldHeight(field["height"].toInt());
+      this->setFieldGoalDepth(field["goalDepth"].toInt());
+      this->setFieldGoalSize(field["goalSize"].toInt());
 
       //cout << "left top: " <<getCornerLeftTop().x() << ", " << getCornerLeftTop().y() << endl;
-
-
 
       //cout << "num of color spaces: " << colorSpaces.size() << endl;
 
@@ -229,6 +283,13 @@ void ConfigDAO::save() {
   borders["bottomRight"] = qPointToJson(this->getCornerRightBottom());
   mainObjectJSON["fieldBorders"] = borders;
 
+  QJsonObject field;
+  field["border"] = this->getFieldBorder();
+  field["width"] = this->getFieldWidth();
+  field["height"] = this->getFieldHeight();
+  field["goalDepth"] = this->getFieldGoalDepth();
+  field["goalSize"] = this->getFieldGoalSize();
+  mainObjectJSON["field"] = field;
 
   this->writeJSON();
 

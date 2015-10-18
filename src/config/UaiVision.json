@@ -7,68 +7,68 @@
             "maxS": 255,
             "maxV": 255,
             "minH": 140,
-            "minS": 78,
-            "minV": 150,
+            "minS": 13,
+            "minV": 116,
             "r": 203,
             "spaceName": "purple"
         },
         {
-            "b": 217,
-            "g": 36,
-            "maxH": 138,
-            "maxS": 255,
-            "maxV": 255,
-            "minH": 90,
-            "minS": 53,
-            "minV": 155,
-            "r": 15,
+            "b": 216,
+            "g": 15,
+            "maxH": 120,
+            "maxS": 206,
+            "maxV": 229,
+            "minH": 94,
+            "minS": 60,
+            "minV": 103,
+            "r": 0,
             "spaceName": "blue"
         },
         {
-            "b": 23,
-            "g": 180,
-            "maxH": 79,
-            "maxS": 226,
-            "maxV": 239,
-            "minH": 51,
-            "minS": 42,
-            "minV": 134,
-            "r": 24,
+            "b": 9,
+            "g": 116,
+            "maxH": 85,
+            "maxS": 86,
+            "maxV": 255,
+            "minH": 44,
+            "minS": 22,
+            "minV": 113,
+            "r": 6,
             "spaceName": "green"
         },
         {
-            "b": 12,
-            "g": 253,
-            "maxH": 40,
-            "maxS": 166,
+            "b": 25,
+            "g": 245,
+            "maxH": 45,
+            "maxS": 168,
             "maxV": 255,
-            "minH": 29,
-            "minS": 46,
-            "minV": 218,
-            "r": 247,
+            "minH": 23,
+            "minS": 35,
+            "minV": 187,
+            "r": 243,
             "spaceName": "yellow"
         },
         {
             "b": 0,
-            "g": 141,
-            "maxH": 17,
-            "maxS": 203,
+            "g": 117,
+            "maxH": 13,
+            "maxS": 151,
             "maxV": 255,
             "minH": 0,
-            "minS": 114,
-            "minV": 129,
+            "minS": 39,
+            "minV": 113,
             "r": 255,
             "spaceName": "orange"
         },
         {
             "b": 255,
             "g": 255,
-            "maxH": 0,
-            "maxS": 0,
-            "maxV": 0,
+            "maxH": 255,
+            "maxS": 23,
+            "maxV": 255,
             "minH": 0,
             "minS": 0,
-            "minV": 0,
+            "minV": 134,
             "r": 255,
             "spaceName": "white"
         },
@@ -85,22 +85,29 @@
             "spaceName": "black"
         }
     ],
+    "field": {
+        "border": 5,
+        "goalDepth": 27,
+        "goalSize": 40,
+        "height": 120,
+        "width": 153
+    },
     "fieldBorders": {
         "bottomLeft": {
-            "x": 83,
-            "y": 478
+            "x": 109,
+            "y": 479
         },
         "bottomRight": {
-            "x": 570,
+            "x": 537,
             "y": 478
         },
         "topLeft": {
-            "x": 83,
-            "y": 9
+            "x": 112,
+            "y": 1
         },
         "topRight": {
-            "x": 561,
-            "y": 2
+            "x": 536,
+            "y": 1
         }
     },
     "lastUpdate": {

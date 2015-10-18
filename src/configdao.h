@@ -46,6 +46,21 @@ public:
     void setCornerRightBottom(const QPoint &value);
 
 
+    int getFieldGoalSize() const;
+    void setFieldGoalSize(int value);
+
+    int getFieldGoalDepth() const;
+    void setFieldGoalDepth(int value);
+
+    int getFieldWidth() const;
+    void setFieldWidth(int value);
+
+    int getFieldHeight() const;
+    void setFieldHeight(int value);
+
+    int getFieldBorder() const;
+    void setFieldBorder(int value);
+
 signals:
 
 public slots:
@@ -72,6 +87,12 @@ private:
     QPoint cornerLeftBottom;
     QPoint cornerRightTop;
     QPoint cornerRightBottom;
+
+    int fieldGoalSize;
+    int fieldGoalDepth;
+    int fieldWidth;
+    int fieldHeight;
+    int fieldBorder;
 
 
     QPoint jsonToQPoint(QJsonObject obj);
