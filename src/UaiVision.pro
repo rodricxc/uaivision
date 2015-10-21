@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     selectthrashold.cpp \
     colorspace.cpp \
     selectborder.cpp \
-    videolabel.cpp
+    videolabel.cpp \
+    robot.cpp
 
 HEADERS  += mainwindow.h \
     mainqthread.h \
@@ -57,7 +58,8 @@ HEADERS  += mainwindow.h \
     selectthrashold.h \
     colorspace.h \
     selectborder.h \
-    videolabel.h
+    videolabel.h \
+    robot.h
 
 FORMS    += mainwindow.ui \
     glwindow.ui \

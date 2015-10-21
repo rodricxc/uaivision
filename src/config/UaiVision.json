@@ -3,60 +3,60 @@
         {
             "b": 146,
             "g": 37,
-            "maxH": 170,
+            "maxH": 161,
             "maxS": 255,
-            "maxV": 255,
-            "minH": 140,
-            "minS": 13,
-            "minV": 116,
+            "maxV": 247,
+            "minH": 148,
+            "minS": 151,
+            "minV": 156,
             "r": 203,
             "spaceName": "purple"
         },
         {
             "b": 216,
             "g": 15,
-            "maxH": 120,
-            "maxS": 206,
-            "maxV": 229,
-            "minH": 94,
-            "minS": 60,
-            "minV": 103,
+            "maxH": 116,
+            "maxS": 233,
+            "maxV": 255,
+            "minH": 80,
+            "minS": 108,
+            "minV": 93,
             "r": 0,
             "spaceName": "blue"
         },
         {
             "b": 9,
             "g": 116,
-            "maxH": 85,
-            "maxS": 86,
+            "maxH": 77,
+            "maxS": 255,
             "maxV": 255,
             "minH": 44,
             "minS": 22,
-            "minV": 113,
+            "minV": 119,
             "r": 6,
             "spaceName": "green"
         },
         {
             "b": 25,
             "g": 245,
-            "maxH": 45,
-            "maxS": 168,
+            "maxH": 49,
+            "maxS": 78,
             "maxV": 255,
-            "minH": 23,
-            "minS": 35,
-            "minV": 187,
+            "minH": 29,
+            "minS": 12,
+            "minV": 168,
             "r": 243,
             "spaceName": "yellow"
         },
         {
             "b": 0,
             "g": 117,
-            "maxH": 13,
-            "maxS": 151,
+            "maxH": 17,
+            "maxS": 226,
             "maxV": 255,
-            "minH": 0,
-            "minS": 39,
-            "minV": 113,
+            "minH": 2,
+            "minS": 79,
+            "minV": 153,
             "r": 255,
             "spaceName": "orange"
         },
@@ -87,27 +87,27 @@
     ],
     "field": {
         "border": 5,
-        "goalDepth": 27,
+        "goalDepth": 32,
         "goalSize": 40,
         "height": 120,
-        "width": 153
+        "width": 150
     },
     "fieldBorders": {
         "bottomLeft": {
-            "x": 109,
-            "y": 479
-        },
-        "bottomRight": {
-            "x": 537,
+            "x": 141,
             "y": 478
         },
+        "bottomRight": {
+            "x": 533,
+            "y": 479
+        },
         "topLeft": {
-            "x": 112,
-            "y": 1
+            "x": 140,
+            "y": 42
         },
         "topRight": {
-            "x": 536,
-            "y": 1
+            "x": 529,
+            "y": 34
         }
     },
     "lastUpdate": {

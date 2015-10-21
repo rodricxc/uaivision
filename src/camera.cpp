@@ -28,7 +28,7 @@ void Camera::read(Mat &im) {
 }
 
 void Camera::startVideoCapture() {
-  videoCapture = new VideoCapture("/home/rodricxc/uaivision/9.mp4");
+  videoCapture = new VideoCapture("/home/rodricxc/uaivision/16.mp4");
   //videoCapture = new VideoCapture("/home/rodricxc/uaivision/7.mp4");
   //videoCapture = new VideoCapture("/home/rodricxc/cam.mp4");
     //videoCapture = new VideoCapture("/var/www/filme/ski.mp4");

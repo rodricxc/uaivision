@@ -170,7 +170,7 @@ void MainQThread::trackFilteredObject(int &x, int &y, Mat threshold, Mat &camera
 vector<Point>  MainQThread::trackFilteredObject2( Mat threshold, Mat &cameraFeed, Scalar c) { // from https://raw.githubusercontent.com/kylehounslow/opencv-tuts/master/object-tracking-tut/objectTrackingTut.cpp
   int MIN_OBJECT_AREA = 25;
   int MAX_OBJECT_AREA = 400;
-  int MAX_NUM_OBJECTS = 100;
+  int MAX_NUM_OBJECTS = 20;
   int x,y;
 
   Scalar color  = Scalar(c[2],c[1],c[0]);
@@ -230,6 +230,65 @@ vector<Point>  MainQThread::trackFilteredObject2( Mat threshold, Mat &cameraFeed
   return positions;
 }
 
+vector<Point>  MainQThread::trackFilteredObject2Ball( Mat threshold, Mat &cameraFeed, Scalar c) { // from https://raw.githubusercontent.com/kylehounslow/opencv-tuts/master/object-tracking-tut/objectTrackingTut.cpp
+  int MIN_OBJECT_AREA = 25;
+  int MAX_OBJECT_AREA = 400;
+  int MAX_NUM_OBJECTS = 20;
+  int x,y;
+
+  Scalar color  = Scalar(c[2],c[1],c[0]);
+
+  Mat temp;
+  threshold.copyTo(temp);
+  vector< vector<Point> > contours;
+  vector<Vec4i> hierarchy;
+  //find contours of filtered image using openCV findContours function
+  findContours(temp,contours,hierarchy,CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE );
+
+  temp.release();
+
+
+  vector<Point> positions;
+
+  vector<vector<Point> > hull( contours.size() );
+  vector<Point2f>center( contours.size() );
+  vector<float>radius( contours.size() );
+  vector<vector<Point> > contours_poly( contours.size() );
+
+
+  for( int i = 0; i< contours.size(); i++ ) {
+      approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
+      convexHull( Mat(contours[i]), hull[i], false );
+      minEnclosingCircle( (Mat)contours_poly[i], center[i], radius[i] );
+    }
+
+  //use moments method to find our filtered object
+  int numObjects = hierarchy.size();
+  //if number of objects greater than MAX_NUM_OBJECTS we have a noisy filter
+  if(numObjects<MAX_NUM_OBJECTS){
+      for( int index = 0; index< contours.size(); index++ ) {
+
+          Moments moment = moments((cv::Mat)contours[index]);
+          double area = moment.m00;
+
+
+          if(area>MIN_OBJECT_AREA && area<MAX_OBJECT_AREA && radius[index] <= 6 && radius[index] > 2){
+          //if(area>MIN_OBJECT_AREA && area<MAX_OBJECT_AREA ){
+              x = moment.m10/area;
+              y = moment.m01/area;
+
+              positions.push_back(Point(x,y));
+
+              drawContours( cameraFeed, hull, index, color, CV_FILLED, 8, hierarchy, 0, Point() );
+            }
+        }
+
+    } else {
+      putText(cameraFeed,"TOO MUCH NOISE! ADJUST FILTER",Point(0,50),1,2,Scalar(0,0,255),2);
+    }
+
+  return positions;
+}
 
 void MainQThread::drawObject(int x, int y, Mat &frame) { // from https://raw.githubusercontent.com/kylehounslow/opencv-tuts/master/object-tracking-tut/objectTrackingTut.cpp
   //use some of the openCV drawing functions to draw crosshairs
@@ -390,141 +449,387 @@ void MainQThread::removeBorders(Mat &src, Mat &out, QPoint topLeft, QPoint botto
 //*/
 }
 
+
+void MainQThread::cmToPixel(Mat &img, double x, double y, int &px, int &py) {
+
+  ConfigDAO *config = ConfigDAO::Instance();
+
+  px = round(config->getFieldBorder() + config->getFieldGoalDepth() + ((double)(img.cols - 2*config->getFieldBorder() - 2*config->getFieldGoalDepth()))/((double)(config->getFieldWidth())) * x);
+  py = round(config->getFieldBorder() +                               ((double)(img.rows - 2*config->getFieldBorder()                              ))/((double)(config->getFieldHeight())) * y);
+}
+
+void MainQThread::cmToPixelProportion(Mat &img, double &px, double &py) {
+
+  ConfigDAO *config = ConfigDAO::Instance();
+
+  px = ((double)(img.cols - 2*config->getFieldBorder() - 2*config->getFieldGoalDepth()))/((double)(config->getFieldWidth()));
+  py = ((double)(img.rows - 2*config->getFieldBorder()                                ))/((double)(config->getFieldHeight()));
+
+}
+
+Point2d MainQThread::cmToPixelProportionPoint(Mat &img) {
+  double px,py;
+  ConfigDAO *config = ConfigDAO::Instance();
+
+  px = ((double)(img.cols - 2*config->getFieldBorder() - 2*config->getFieldGoalDepth()))/((double)(config->getFieldWidth()));
+  py = ((double)(img.rows - 2*config->getFieldBorder()                                ))/((double)(config->getFieldHeight()));
+  return Point2d(px,py);
+}
+
+Point2d MainQThread::pixelToCm(Point2d proportion, Point2d pixelPos) {
+  ConfigDAO *config = ConfigDAO::Instance();
+  double x, y;
+  x = (pixelPos.x - config->getFieldGoalDepth() - config->getFieldBorder())/proportion.x - config->getFieldWidth()/2.0;
+  y = - (pixelPos.y - config->getFieldBorder())/proportion.y + config->getFieldHeight()/2.0;
+
+  return Point2d(x,y);
+}
+
+Point2d MainQThread::cmToPixelPoint(Point2d proportion, Point2d cmPos) {
+  ConfigDAO *config = ConfigDAO::Instance();
+  double x, y;
+  x = (cmPos.x + config->getFieldWidth()/2.0)* proportion.x  + config->getFieldGoalDepth() + config->getFieldBorder();
+  y = ( - cmPos.y + config->getFieldHeight()/2.0)* proportion.y  + config->getFieldBorder();
+
+  return Point2d(x,y);
+}
+
+double MainQThread::euclidianDistance(Point2d a, Point2d b) {
+    return sqrt((a.x-b.x)*(a.x-b.x)+
+                (a.y-b.y)*(a.y-b.y));
+}
+
+QColor MainQThread::scalarToQColor(Scalar c) {
+  return QColor(c[2],c[1],c[0]);
+}
+
+Scalar MainQThread::qColorToScalar(QColor c) {
+  return Scalar(c.red(),c.green(),c.blue());
+}
+
+void MainQThread::drawField(Mat &image, Scalar color) {
+
+  //color = Scalar(0,255,0);
+
+  ConfigDAO *config = ConfigDAO::Instance();
+
+  int width = image.cols;
+  int height = image.rows;
+
+  int fieldBorder = config->getFieldBorder();
+  int fieldWidth  = config->getFieldWidth();
+  int fieldDepth  = config->getFieldGoalDepth();
+
+  line(image, Point(fieldDepth+fieldBorder, fieldBorder), Point(fieldDepth+fieldBorder, height - fieldBorder),color,2);
+  line(image, Point(fieldDepth+fieldBorder, height - fieldBorder), Point(width - fieldDepth - fieldBorder - 1, height - fieldBorder),color,2);
+  line(image, Point(width - fieldDepth - fieldBorder - 1, fieldBorder), Point(width - fieldDepth - fieldBorder - 1, height - fieldBorder),color,2);
+  line(image, Point(width - fieldDepth - fieldBorder - 1, fieldBorder), Point(fieldDepth+fieldBorder, fieldBorder),color,2);
+
+  line(image, Point(width/2, fieldBorder), Point(width/2, height - fieldBorder),color,2);
+
+
+  int x,y;
+  double px,py;
+  cmToPixel(image,config->getFieldWidth()/2.0, config->getFieldHeight()/2.0, x, y);
+  cmToPixelProportion(image, px, py);
+  ellipse(image,Point(x,y),Size(px*20, py*20), 360,0,360,color,2);
+  //cout << px << ", " << py << endl;
+
+
+
+}
+
+void MainQThread::drawRobot(Mat &image, Robot robot, Point2d proportion) {
+  Point2d pixPos = cmToPixelPoint(proportion, robot.getPosition());
+  Scalar color = qColorToScalar(robot.getColorRobot());
+  Scalar team = qColorToScalar(robot.getColorTeam());
+
+  circle(image, pixPos, 20, team, 2);
+  circle(image, pixPos, 15, color, 2);
+}
+
+
 void MainQThread::run() {
 
-    Camera *camera = Camera::getCamera();
-    CameraParameters cp;
-    //QTime frameRateTime;
-    //frameRateTime= QTime::currentTime();
+  Camera *camera = Camera::getCamera();
+  CameraParameters cp;
+  QTime frameRateTime;
+  frameRateTime= QTime::currentTime();
 
-    if (!camera->isOpened()) { //check if video device has been initialised
-        cout << "cannot open camera";
-        return;
+  if (!camera->isOpened()) { //check if video device has been initialised
+      cout << "cannot open camera";
+      return;
     }
-    Mat cameraFrameRow;
-    Mat cameraFrame;
-    Mat imageHSV;
+  Mat cameraFrameRow;
+  Mat cameraFrame;
+  Mat imageHSV;
 
-    Mat elementMorph3;
-    Mat elementMorph5;
+  Mat elementMorph3;
+  Mat elementMorph5;
 
-    Mat thresh;
-    vector<ColorSpace> colorSpaces;
-    vector<ColorSpace>::iterator it;
+  Mat thresh;
+  vector<ColorSpace> colorSpaces;
+  vector<ColorSpace>::iterator it;
 
-    elementMorph3 = getStructuringElement( MORPH_RECT,Size(3,3));
-    elementMorph5 = getStructuringElement( MORPH_RECT,Size(5,5));
-
-
-
-    ConfigDAO *config = ConfigDAO::Instance();
-
-    vector<Point> blueObjects;
-    vector<Point> yellowObjects;
-    vector<Point> orangeObjects;
-
-    blueObjects.clear();
-    yellowObjects.clear();
-    orangeObjects.clear();
-
-    if (!this->isInterruptionRequested()){
-
-
-        camera->read(cameraFrameRow);
-
-        while(!this->isInterruptionRequested()){
-
-            this->minHSV = config->getLastModified().getMinHSV();
-            this->maxHSV = config->getLastModified().getMaxHSV();
-            this->removeBorders(cameraFrameRow, cameraFrame, config->getCornerLeftTop(), config->getCornerLeftBottom(), config->getCornerRightBottom(), config->getCornerRightTop(), 640,480);
-
-            cvtColor(cameraFrame, imageHSV, CV_BGR2HSV);
+  elementMorph3 = getStructuringElement( MORPH_RECT,Size(3,3));
+  elementMorph5 = getStructuringElement( MORPH_RECT,Size(5,5));
 
 
 
+  ConfigDAO *config = ConfigDAO::Instance();
 
-            colorSpaces = config->getColorSpaces();
-            it = colorSpaces.begin();
-            ColorSpace cs;
+  vector<Point> blueObjects;
+  vector<Point> yellowObjects;
+  vector<Point> orangeObjects;
+  vector<Point> greenObjects;
+  vector<Point> purpleObjects;
+
+  ColorSpace yellow;
+  ColorSpace blue;
+  ColorSpace green;
+  ColorSpace purple;
+
+  blueObjects.clear();
+  yellowObjects.clear();
+  orangeObjects.clear();
+  greenObjects.clear();
+  purpleObjects.clear();
+
+  double minDist = 2;
+  double maxDist = 10;
+
+  vector<Robot> robots;
+  robots.clear();
+
+  if (!this->isInterruptionRequested()){
 
 
-            for (; it!= colorSpaces.end(); it++) {
-                cs = *(it);
+      camera->read(cameraFrameRow);
 
-                if (cs.getName().compare("yellow")==0) {
-                    inRange(imageHSV,cs.getMinHSV(),cs.getMaxHSV(),thresh);
-                    erode(thresh,thresh,elementMorph3);
-                    dilate(thresh,thresh,elementMorph3);
-                    yellowObjects = trackFilteredObject2(thresh,cameraFrame, cs.getColor());
+      while(!this->isInterruptionRequested()){
+
+          cout << "frame rate: "<< (frameRateTime.msecsTo(QTime::currentTime()))<<" - ";
+
+          this->minHSV = config->getLastModified().getMinHSV();
+          this->maxHSV = config->getLastModified().getMaxHSV();
+          this->removeBorders(cameraFrameRow, cameraFrame, config->getCornerLeftTop(), config->getCornerLeftBottom(), config->getCornerRightBottom(), config->getCornerRightTop(), 400,300);
+
+          cvtColor(cameraFrame, imageHSV, CV_BGR2HSV);
+
+          colorSpaces = config->getColorSpaces();
+          it = colorSpaces.begin();
+          ColorSpace cs;
+
+          Mat imageBlack( cameraFrame.rows, cameraFrame.cols, CV_8UC3, Scalar(0,0,0));
+          drawField(imageBlack, Scalar(255,255,255));
+
+
+          for (; it!= colorSpaces.end(); it++) {
+              cs = *(it);
+
+              if (cs.getName().compare("yellow")==0) {
+                  yellow = cs;
+                  inRange(imageHSV,cs.getMinHSV(),cs.getMaxHSV(),thresh);
+                  erode(thresh,thresh,elementMorph3);
+                  dilate(thresh,thresh,elementMorph3);
+                  yellowObjects = trackFilteredObject2(thresh,imageBlack, cs.getColor());
                 }
 
-
-                if (cs.getName().compare("blue")==0) {
-                    inRange(imageHSV,cs.getMinHSV(),cs.getMaxHSV(),thresh);
-                    erode(thresh,thresh,elementMorph3);
-                    dilate(thresh,thresh,elementMorph3);
-                    blueObjects = trackFilteredObject2(thresh,cameraFrame, cs.getColor());
+              if (cs.getName().compare("blue")==0) {
+                  blue = cs;
+                  inRange(imageHSV,cs.getMinHSV(),cs.getMaxHSV(),thresh);
+                  erode(thresh,thresh,elementMorph3);
+                  dilate(thresh,thresh,elementMorph3);
+                  blueObjects = trackFilteredObject2(thresh,imageBlack, cs.getColor());
                 }
 
-
-                if (cs.getName().compare("orange")==0) {
-                    inRange(imageHSV,cs.getMinHSV(),cs.getMaxHSV(),thresh);
-                    erode(thresh,thresh,elementMorph3);
-                    dilate(thresh,thresh,elementMorph3);
-                    orangeObjects = trackFilteredObject2(thresh,cameraFrame, cs.getColor());
+              if (cs.getName().compare("orange")==0) {
+                  inRange(imageHSV,cs.getMinHSV(),cs.getMaxHSV(),thresh);
+                  erode(thresh,thresh,elementMorph3);
+                  //erode(thresh,thresh,elementMorph3);
+                  //dilate(thresh,thresh,elementMorph3);
+                  dilate(thresh,thresh,elementMorph3);
+                  orangeObjects = trackFilteredObject2Ball(thresh,imageBlack, cs.getColor());
                 }
-              }
+
+              if (cs.getName().compare("green")==0) {
+                  green = cs;
+                  inRange(imageHSV,cs.getMinHSV(),cs.getMaxHSV(),thresh);
+                  erode(thresh,thresh,elementMorph3);
+                  dilate(thresh,thresh,elementMorph3);
+                  greenObjects = trackFilteredObject2(thresh,imageBlack, cs.getColor());
+                }
+
+              if (cs.getName().compare("purple")==0) {
+                  purple = cs;
+                  inRange(imageHSV,cs.getMinHSV(),cs.getMaxHSV(),thresh);
+                  erode(thresh,thresh,elementMorph3);
+                  dilate(thresh,thresh,elementMorph3);
+                  purpleObjects = trackFilteredObject2(thresh,imageBlack, cs.getColor());
+                }
+            }
+
+          Point2d proportion;
+          proportion = cmToPixelProportionPoint(cameraFrame);
+
+          if (orangeObjects.size() == 0) {
+              putText(cameraFrame,"No Ball",Point(0,50),2,1,Scalar(0,0,255),2);
+          } else if (orangeObjects.size() >1) {
+              putText(cameraFrame,"Too many balls",Point(0,50),2,1,Scalar(0,0,255),2);
+          } else {
+              //Point ballAt = orangeObjects.at(0);
+              //cout << "ball X: " << (ballAt.x - config->getFieldGoalDepth() - config->getFieldBorder())/px << endl;
+              //cout << "ball Y: " << (ballAt.y - config->getFieldBorder())/py << endl;
+            }
 
 
-            if (orangeObjects.size() == 0) {
-                putText(cameraFrame,"No Ball",Point(0,50),2,1,Scalar(0,0,255),2);
-              } else if (orangeObjects.size() >1) {
-                putText(cameraFrame,"Too much balls",Point(0,50),2,1,Scalar(0,0,255),2);
-              }
+          //Corrigir depois
 
 
-                inRange(imageHSV,this->minHSV,this->maxHSV,thresh);
 
-                    elementMorph3 = getStructuringElement( MORPH_RECT,Size(3,3));
-                //dilate with larger element so make sure object is nicely visible
-                    elementMorph5 = getStructuringElement( MORPH_RECT,Size(5,5));
+          robots.clear();
 
-                    erode(thresh,thresh,elementMorph3);
-                    //erode(thresh,thresh,elementMorph3);
-                    //dilate(thresh,thresh,erodeElement);
-                   // dilate(thresh,thresh,elementMorph3);
-                    dilate(thresh,thresh,elementMorph3);
-
-
-            QImage imgs = Utils::mat2QImage(thresh);
-            emit displayThrashold(imgs);
+          for (int i = 0; i<yellowObjects.size(); i++) {
+              bool found = false;
+              Point2d min;
+              Point2d basePointCm = pixelToCm(proportion, yellowObjects[i]);
+              Point2d calc, other;
+              double otherDist;
+              QColor color;
 
 
-            //QImage imgss = Utils::mat2QImage(cameraFrame);
-            //emit displayThisImageMin(imgss);
+              for (int j = 0; j<greenObjects.size(); j++) {
+                  calc = pixelToCm(proportion, greenObjects[j]);
+                  double dist = euclidianDistance(basePointCm, calc);
 
-            QImage imgsss = Utils::mat2QImage(cameraFrameRow);
-            emit displayImageSelectBorders(imgsss);
+                  if (dist >= minDist && dist <=maxDist && (!found || dist < otherDist)) {
+                      found = true;
+                      otherDist = dist;
+                      other = calc;
+                      color = scalarToQColor(green.getColor());
+                    }
+                }
 
-            QImage img = Utils::mat2QImage(cameraFrame);
-            emit displayThisImage(img);
-            //this->usleep(100);
+              for (int j = 0; j<purpleObjects.size(); j++) {
+                  calc = pixelToCm(proportion, purpleObjects[j]);
+                  double dist = euclidianDistance(basePointCm, calc);
+
+                  if (dist >= minDist && dist <=maxDist && (!found || dist < otherDist)) {
+                      found = true;
+                      otherDist = dist;
+                      other = calc;
+                      color = scalarToQColor(purple.getColor());
+                    }
+                }
+
+              if (found) {
+                  Point2d robotPoint(basePointCm.x,basePointCm.y);
+                  double ang = atan2(other.y - basePointCm.y,other.x - basePointCm.x);
+                  Robot r;
+                  r.setAngle(ang);
+                  r.setColorRobot(color);
+                  r.setColorTeam(scalarToQColor(yellow.getColor()));
+                  r.setPosition(robotPoint);
+                  robots.push_back(r);
+                }
+
+            }
+
+          for (int i = 0; i<blueObjects.size(); i++) {
+              bool found = false;
+              Point2d min;
+              Point2d basePointCm = pixelToCm(proportion, blueObjects[i]);
+              Point2d calc, other;
+              double otherDist;
+              QColor color;
 
 
-            //cout << "frame rate: "<< 1/(frameRateTime.msecsTo(QTime::currentTime())/1000.0)<<" fps"<<endl;
+              for (int j = 0; j<greenObjects.size(); j++) {
+                  calc = pixelToCm(proportion, greenObjects[j]);
+                  double dist = euclidianDistance(basePointCm, calc);
 
-            //frameRateTime = QTime::currentTime();
-            camera->read(cameraFrameRow);
-            //this->usleep(100000);
+                  if (dist >= minDist && dist <=maxDist && (!found || dist < otherDist)) {
+                      found = true;
+                      otherDist = dist;
+                      other = calc;
+                      color = scalarToQColor(green.getColor());
+                    }
+                }
+
+              for (int j = 0; j<purpleObjects.size(); j++) {
+                  calc = pixelToCm(proportion, purpleObjects[j]);
+                  double dist = euclidianDistance(basePointCm, calc);
+
+                  if (dist >= minDist && dist <=maxDist && (!found || dist < otherDist)) {
+                      found = true;
+                      otherDist = dist;
+                      other = calc;
+                      color = scalarToQColor(purple.getColor());
+                    }
+                }
+
+              if (found) {
+                  Point robotPoint(basePointCm.x,basePointCm.y);
+                  double ang = atan2(other.y - basePointCm.y,other.x - basePointCm.x);
+                  Robot r;
+                  r.setAngle(ang);
+                  r.setColorRobot(color);
+                  r.setColorTeam(scalarToQColor(blue.getColor()));
+                  r.setPosition(robotPoint);
+                  robots.push_back(r);
+                }
+
+            }
+
+          for (int i = 0; i<robots.size(); i++) {
+              drawRobot(imageBlack, robots[i], proportion);
+            }
+
+
+
+
+
+
+
+
+
+
+          inRange(imageHSV,this->minHSV,this->maxHSV,thresh);
+          erode(thresh,thresh,elementMorph3);
+          dilate(thresh,thresh,elementMorph3);
+
+
+          cout << (frameRateTime.msecsTo(QTime::currentTime()))<<" - ";
+
+          QImage imgs = Utils::mat2QImage(thresh);
+          emit displayThrashold(imgs);
+
+
+          QImage imgss = Utils::mat2QImage(cameraFrame);
+          emit displayThisImageMin(imgss);
+
+          QImage imgsss = Utils::mat2QImage(cameraFrameRow);
+          emit displayImageSelectBorders(imgsss);
+
+          QImage img = Utils::mat2QImage(imageBlack);
+          emit displayThisImage(img);
+          //this->usleep(100);
+
+
+          cout << (frameRateTime.msecsTo(QTime::currentTime()))<<" msecs"<<endl;
+
+          frameRateTime = QTime::currentTime();
+          camera->read(cameraFrameRow);
+          //this->usleep(100000);
         }
     }
 
-    cameraFrameRow.release();
-    cameraFrame.release();
-    imageHSV.release();
-    elementMorph3.release();
-    elementMorph5.release();
-    thresh.release();
+  cameraFrameRow.release();
+  cameraFrame.release();
+  imageHSV.release();
+  elementMorph3.release();
+  elementMorph5.release();
+  thresh.release();
 }
 
 
