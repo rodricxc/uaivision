@@ -25,6 +25,9 @@
 #Build directory
 build/
 
+#Results Directory
+results/
+
 # Executables
 *.exe
 *.out

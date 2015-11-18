@@ -7,14 +7,35 @@ ConfigDAO::ConfigDAO(QObject *parent) : QObject(parent) {
   cout << "Starting dao with config file from: " << fileName.toStdString() << endl;
   this->readJSON();
 }
+double ConfigDAO::getFieldProportion() const
+{
+    return fieldProportion;
+}
+
+void ConfigDAO::setFieldProportion(double value)
+{
+  fieldProportion = value;
+}
+
+int ConfigDAO::calcWidthProportion() {
+  return ceil(this->fieldBorder * 2
+              + this->fieldGoalDepth * 2
+              + this->fieldProportion * this->fieldWidth);
+}
+
+int ConfigDAO::calcHeightProportion() {
+  return ceil(this->fieldBorder * 2
+              + this->fieldProportion * this->fieldHeight);
+}
+
 int ConfigDAO::getFieldBorder() const
 {
-  return fieldBorder;
+    return fieldBorder;
 }
 
 void ConfigDAO::setFieldBorder(int value)
 {
-  fieldBorder = value;
+    fieldBorder = value;
 }
 
 int ConfigDAO::getFieldHeight() const
@@ -136,6 +157,7 @@ bool ConfigDAO::readJSON() {
       this->setFieldHeight(field["height"].toInt());
       this->setFieldGoalDepth(field["goalDepth"].toInt());
       this->setFieldGoalSize(field["goalSize"].toInt());
+      this->setFieldProportion(field["proportion"].toDouble());
 
       //cout << "left top: " <<getCornerLeftTop().x() << ", " << getCornerLeftTop().y() << endl;
 
@@ -289,6 +311,7 @@ void ConfigDAO::save() {
   field["height"] = this->getFieldHeight();
   field["goalDepth"] = this->getFieldGoalDepth();
   field["goalSize"] = this->getFieldGoalSize();
+  field["proportion"] = this->getFieldProportion();
   mainObjectJSON["field"] = field;
 
   this->writeJSON();

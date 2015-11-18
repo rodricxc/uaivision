@@ -40,6 +40,8 @@ private slots:
 
   void on_goalDepth_valueChanged(int arg1);
 
+  void on_proportion_valueChanged(double arg1);
+
 private:
   Ui::selectBorder *ui;
   QPoint clickPosition;

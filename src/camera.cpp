@@ -4,6 +4,8 @@ Camera* Camera::camera = NULL;
 
 Camera::Camera() {
     startVideoCapture();
+    this->reloaded = false;
+
 }
 
 Camera* Camera::getCamera() {
@@ -18,17 +20,22 @@ bool Camera::isOpened() {
 }
 
 void Camera::read(Mat &im) {
+   //*
     this->videoCapture->read(im);
     if (im.empty()) {
+      this->reloaded = true;
       this->stopVideoCapture();
       this->startVideoCapture();
       this->videoCapture->read(im);
 
     }
+    //*/
+
+   // im = imread("transformed.png", CV_LOAD_IMAGE_COLOR);
 }
 
 void Camera::startVideoCapture() {
-  videoCapture = new VideoCapture("/home/rodricxc/uaivision/16.mp4");
+  videoCapture = new VideoCapture("/home/rodricxc/uaivision/19.mp4");
   //videoCapture = new VideoCapture("/home/rodricxc/uaivision/7.mp4");
   //videoCapture = new VideoCapture("/home/rodricxc/cam.mp4");
     //videoCapture = new VideoCapture("/var/www/filme/ski.mp4");
@@ -40,3 +47,6 @@ void Camera::stopVideoCapture() {
     delete videoCapture;
 }
 
+bool Camera::reload() {
+  return this->reloaded;
+}

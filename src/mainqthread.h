@@ -19,6 +19,7 @@
 #include "configdao.h"
 #include <QColor>
 #include <robot.h>
+#include <QElapsedTimer>
 
 using namespace cv;
 using namespace std;
@@ -42,6 +43,7 @@ public:
     QColor scalarToQColor(Scalar c);
     Point2d cmToPixelPoint(Point2d proportion, Point2d cmPos);
     Scalar qColorToScalar(QColor c);
+    bool compareQColor(QColor a, QColor b);
 signals:
     void displayThrashold(QImage image);
     void displayThisImage(QImage image);

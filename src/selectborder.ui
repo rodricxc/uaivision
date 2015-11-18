@@ -107,17 +107,17 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Border:</string>
-         </property>
-        </widget>
-       </item>
        <item row="6" column="0">
         <widget class="QLabel" name="label_7">
          <property name="text">
           <string>Depth:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Border:</string>
          </property>
         </widget>
        </item>
@@ -135,6 +135,9 @@
          </property>
         </widget>
        </item>
+       <item row="6" column="1">
+        <widget class="QSpinBox" name="goalDepth"/>
+       </item>
        <item row="3" column="1">
         <widget class="QSpinBox" name="border">
          <property name="maximum">
@@ -149,8 +152,26 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
-        <widget class="QSpinBox" name="goalDepth"/>
+       <item row="8" column="1">
+        <widget class="QDoubleSpinBox" name="proportion">
+         <property name="singleStep">
+          <double>0.250000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Proportion:</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

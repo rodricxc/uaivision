@@ -15,11 +15,13 @@ public:
     bool isOpened();
     void read(cv::Mat &im);
 
+    bool reload();
 private:
     static Camera *camera;
     VideoCapture *videoCapture;
     void startVideoCapture();
     void stopVideoCapture();
+    bool reloaded;
 
 
     Camera();

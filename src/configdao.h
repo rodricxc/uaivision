@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QPoint>
+#include <math.h>
 
 using namespace std;
 using namespace cv;
@@ -61,6 +62,12 @@ public:
     int getFieldBorder() const;
     void setFieldBorder(int value);
 
+    double getFieldProportion() const;
+    void setFieldProportion(double value);
+
+    int calcWidthProportion();
+    int calcHeightProportion();
+
 signals:
 
 public slots:
@@ -93,6 +100,8 @@ private:
     int fieldWidth;
     int fieldHeight;
     int fieldBorder;
+
+    double fieldProportion;
 
 
     QPoint jsonToQPoint(QJsonObject obj);

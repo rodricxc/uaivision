@@ -27,36 +27,36 @@
         {
             "b": 9,
             "g": 116,
-            "maxH": 70,
-            "maxS": 127,
+            "maxH": 77,
+            "maxS": 255,
             "maxV": 255,
             "minH": 44,
-            "minS": 37,
-            "minV": 163,
+            "minS": 22,
+            "minV": 119,
             "r": 6,
             "spaceName": "green"
         },
         {
             "b": 25,
             "g": 245,
-            "maxH": 66,
-            "maxS": 135,
+            "maxH": 49,
+            "maxS": 78,
             "maxV": 255,
             "minH": 29,
-            "minS": 4,
-            "minV": 246,
+            "minS": 12,
+            "minV": 168,
             "r": 243,
             "spaceName": "yellow"
         },
         {
             "b": 0,
-            "g": 156,
-            "maxH": 22,
-            "maxS": 255,
+            "g": 117,
+            "maxH": 17,
+            "maxS": 226,
             "maxV": 255,
-            "minH": 3,
-            "minS": 98,
-            "minV": 86,
+            "minH": 2,
+            "minS": 79,
+            "minV": 153,
             "r": 255,
             "spaceName": "orange"
         },
@@ -86,29 +86,28 @@
         }
     ],
     "field": {
-        "border": 4,
-        "goalDepth": 30,
+        "border": 5,
+        "goalDepth": 32,
         "goalSize": 40,
         "height": 130,
-        "proportion": 3.5,
         "width": 150
     },
     "fieldBorders": {
         "bottomLeft": {
-            "x": 163,
-            "y": 453
+            "x": 141,
+            "y": 478
         },
         "bottomRight": {
-            "x": 550,
-            "y": 457
+            "x": 533,
+            "y": 479
         },
         "topLeft": {
-            "x": 162,
-            "y": 11
+            "x": 140,
+            "y": 42
         },
         "topRight": {
-            "x": 550,
-            "y": 6
+            "x": 529,
+            "y": 34
         }
     },
     "lastUpdate": {

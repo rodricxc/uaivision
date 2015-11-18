@@ -1,5 +1,6 @@
 #include "selectborder.h"
 #include "ui_selectborder.h"
+#include <QFile>
 
 using namespace std;
 
@@ -21,6 +22,7 @@ SelectBorder::SelectBorder(QWidget *parent) :
   this->ui->border->setValue(config->getFieldBorder());
   this->ui->goalDepth->setValue(config->getFieldGoalDepth());
   this->ui->goalSize->setValue(config->getFieldGoalSize());
+  this->ui->proportion->setValue(config->getFieldProportion());
 
 }
 
@@ -61,6 +63,10 @@ void SelectBorder::loadImage(QImage img) {
   this->drawLine(config->getCornerRightTop(),    config->getCornerLeftTop(), &image);
   this->drawLine(config->getCornerLeftTop(),     config->getCornerLeftBottom(), &image);
   this->drawLine(config->getCornerLeftBottom(),  config->getCornerRightBottom(),  &image);
+
+  //QFile file("rowWithBorders.png");
+  //file.open(QIODevice::WriteOnly);
+  //image.save(&file, "PNG");
 
 
   ui->videoLabel->setPixmap(image);
@@ -137,4 +143,8 @@ void SelectBorder::on_goalSize_valueChanged(int arg1) {
 
 void SelectBorder::on_goalDepth_valueChanged(int arg1) {
     ConfigDAO::Instance()->setFieldGoalDepth(arg1);
+}
+
+void SelectBorder::on_proportion_valueChanged(double arg1) {
+    ConfigDAO::Instance()->setFieldProportion(arg1);
 }
