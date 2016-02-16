@@ -12,4 +12,4 @@ UaiVision: A vision system for IEEE Very Small Size league of robot soccer
 
 ## How to Use
 
-
+Documentation/Thesis of the system (Portuguese): http://dcomp.ufsj.edu.br/~rodricxc/uaivision.pdf
